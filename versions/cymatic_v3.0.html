@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="folio" content="5204160405358537">
+    <meta name="sha" content="a4ff808e">
+    <meta name="trace" content="KRONOS-TRACE-PVA-5204160405358537-KRONOS-MT01JAAF">
+    <title>CYMATIC STUDIO v3.0 · Cymatic Core</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { margin: 0; overflow: hidden; background: #020308; color: #e2e8f0; font-family: 'Courier New', monospace; }
+        canvas { display: block; width: 100%; height: 100vh; }
+        .watermark {
+            position: fixed; bottom: 20px; right: 20px;
+            font-size: 0.6rem; opacity: 0.3;
+            color: #00ffcc; letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .licencia-info {
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            color: #00ffcc;
+            border: 1px solid rgba(0,255,204,0.1);
+            backdrop-filter: blur(4px);
+            z-index: 10;
+            font-family: 'Courier New', monospace;
+        }
+        .translator-top {
+            position: fixed; top: 20px; left: 20px; z-index: 100;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,255,204,0.1);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.6rem;
+            color: #64748b;
+        }
+        #google_translate_element_v3 { min-width: 100px; }
+        .goog-te-gadget-simple { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(0,255,204,0.08) !important; border-radius: 6px !important; padding: 2px 8px !important; }
+        .goog-te-gadget-simple .goog-te-menu-value { color: #e2e8f0 !important; }
+        .contact-bar {
+            position: fixed; bottom: 20px; left: 20px; z-index: 10;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.55rem;
+            color: #94a3b8;
+            border: 1px solid rgba(0,255,204,0.05);
+            backdrop-filter: blur(4px);
+        }
+        .contact-bar a { color: #00ffcc; text-decoration: none; }
+        .hud-info {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0,0,0,0.5);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            border: 1px solid rgba(0,255,204,0.05);
+            backdrop-filter: blur(4px);
+            text-align: center;
+            pointer-events: none;
+        }
+        .hud-info span { color: #00ffcc; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<!-- ===== SISTEMA DE LICENCIA (v3.0 – requiere clave) ===== -->
+<script>
+    (function() {
+        const LICENCIA = {
+            PRODUCTO: 'CYMATIC STUDIO Cymatic Core',
+            VERSION: 'v3.0'
+        };
+        function obtenerLicencia() {
+            let licencia = localStorage.getItem('cymatic_licencia');
+            if (licencia) return licencia;
+            licencia = sessionStorage.getItem('cymatic_licencia');
+            if (licencia) return licencia;
+            const urlParams = new URLSearchParams(window.location.search);
+            licencia = urlParams.get('licencia');
+            if (licencia) { localStorage.setItem('cymatic_licencia', licencia); return licencia; }
+            return null;
+        }
+        function validarLicencia(clave) {
+            if (!clave) return false;
+            // Las claves válidas comienzan con "CYMATIC-" y tienen al menos 10 caracteres
+            if (clave.startsWith('CYMATIC-') && clave.length >= 10) return true;
+            return false;
+        }
+        function mostrarBloqueo(mensaje) {
+            document.body.innerHTML = `
+                <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;background:#020308;color:#ff4d6d;font-family:'Courier New',monospace;padding:20px;text-align:center;">
+                    <div style="font-size:4rem;margin-bottom:20px;">🔒</div>
+                    <h1 style="font-size:2rem;margin-bottom:10px;color:#ff4d6d;">${mensaje}</h1>
+                    <p style="color:#64748b;font-size:1rem;max-width:500px;line-height:1.6;">
+                        Este software requiere una licencia válida para funcionar.
+                        <br><br>
+                        <span style="color:#00ffcc;">Contacta a soporte@cymaticstudio.com</span>
+                        <br><br>
+                        <button onclick="ingresarLicencia()" style="background:linear-gradient(135deg,#00ffcc,#a855f7);color:#000;border:none;padding:12px 32px;border-radius:40px;font-weight:800;cursor:pointer;font-size:1rem;font-family:'Courier New',monospace;margin-top:10px;">
+                            🔑 Ingresar clave de licencia
+                        </button>
+                        <br><br>
+                        <a href="checkout.html" style="color:#00ffcc;font-size:0.9rem;">🛒 Comprar licencia</a>
+                    </p>
+                </div>
+            `;
+        }
+        window.ingresarLicencia = function() {
+            const clave = prompt('🔑 Ingresa tu clave de licencia de CYMATIC STUDIO:');
+            if (clave) {
+                localStorage.setItem('cymatic_licencia', clave);
+                location.reload();
+            }
+        };
+        const licencia = obtenerLicencia();
+        if (!licencia || !validarLicencia(licencia)) {
+            mostrarBloqueo('⚠️ Licencia no encontrada o inválida');
+        } else {
+            console.log('✅ Licencia válida para CYMATIC STUDIO v3.0');
+            const info = document.createElement('div');
+            info.className = 'licencia-info';
+            info.textContent = '✅ Licencia activa · v3.0 Cymatic Core';
+            document.body.appendChild(info);
+        }
+    })();
+</script>
+
+<!-- Traductor -->
+<div class="translator-top">
+    <span>🌐</span>
+    <div id="google_translate_element_v3"></div>
+</div>
+
+<!-- Canvas -->
+<canvas id="canvas"></canvas>
+<div class="watermark">CYMATIC STUDIO · v3.0 · Cymatic Core</div>
+
+<!-- HUD de características -->
+<div class="hud-info">
+    🌀 5 Geometrías · 🎨 3 Paletas · <span>Activo</span>
+</div>
+
+<!-- Contacto -->
+<div class="contact-bar">
+    📧 <a href="mailto:marco.a.rojas.v@hotmail.com">marco.a.rojas.v@hotmail.com</a> · 
+    📱 <a href="https://wa.me/527225862335" target="_blank">+52 722 586 2335</a>
+</div>
+
+<script>
+    // ===== MOTOR CIMÁTICO v3.0 =====
+    (function() {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        let mouse = { x: width/2, y: height/2 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        let phase = 0;
+        const lineCount = 40;
+        const palettes = [
+            ['rgba(0, 255, 204, 0.5)', 'rgba(168, 85, 247, 0.1)'],
+            ['rgba(255, 200, 0, 0.5)', 'rgba(255, 0, 100, 0.1)'],
+            ['rgba(0, 150, 255, 0.5)', 'rgba(0, 255, 100, 0.1)']
+        ];
+        let paletteIndex = 0;
+
+        // Cambiar paleta cada 5 segundos
+        setInterval(() => {
+            paletteIndex = (paletteIndex + 1) % palettes.length;
+        }, 5000);
+
+        function animate() {
+            ctx.fillStyle = 'rgba(2, 3, 8, 0.08)';
+            ctx.fillRect(0, 0, width, height);
+            phase += 0.005;
+
+            const [col1, col2] = palettes[paletteIndex];
+
+            for (let i = 0; i < lineCount; i++) {
+                const y = (height / lineCount) * i;
+                ctx.beginPath();
+                ctx.lineWidth = i % 2 === 0 ? 1.8 : 0.6;
+                const grad = ctx.createLinearGradient(0, 0, width, 0);
+                grad.addColorStop(0, 'rgba(168, 85, 247, 0.1)');
+                grad.addColorStop(mouse.x / width, col1);
+                grad.addColorStop(1, col2);
+                ctx.strokeStyle = grad;
+
+                for (let x = 0; x < width; x += 6) {
+                    const dist = Math.abs(x - mouse.x);
+                    const influence = Math.max(0, (250 - dist) / 250);
+                    const wave = Math.sin(x * 0.01 + phase + i * 0.15) * 25;
+                    const mouseWave = Math.sin(x * 0.025 + phase * 1.5) * (40 * influence) * (1 - Math.abs(mouse.y - y) / height);
+                    const yPos = y + wave + mouseWave;
+                    if (x === 0) ctx.moveTo(x, yPos);
+                    else ctx.lineTo(x, yPos);
+                }
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+        console.log('🚀 CYMATIC STUDIO v3.0 · Cymatic Core cargado.');
+    })();
+</script>
+
+<!-- Google Translate -->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'es',
+            includedLanguages: 'es,en,fr,de,it,pt,ru,ja,zh-CN,ar,hi,ko',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element_v3');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
