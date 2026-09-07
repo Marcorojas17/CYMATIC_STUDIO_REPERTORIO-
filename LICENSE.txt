@@ -1,0 +1,36 @@
+LICENCIA DE USO – CYMATIC STUDIO
+================================
+
+Versión: 1.0
+Fecha: 2026
+Propietario: CYMATIC STUDIO
+
+1. CONCESIÓN DE LICENCIA
+   Se concede al usuario una licencia no exclusiva, intransferible y perpetua 
+   para utilizar el software CYMATIC STUDIO en la versión adquirida.
+
+2. RESTRICCIONES
+   - No está permitida la redistribución del código fuente sin autorización expresa.
+   - No está permitida la ingeniería inversa, descompilación o desensamblaje.
+   - No está permitido el uso comercial sin la licencia correspondiente (PRO, ULTRA o ENTERPRISE).
+
+3. TIPOS DE LICENCIA
+   - PERSONAL: Uso no comercial, hasta 2 dispositivos.
+   - PRO: Uso comercial, hasta 2 dispositivos.
+   - ULTRA: Uso comercial, hasta 3 dispositivos, incluye marca blanca básica.
+   - ENTERPRISE: Uso comercial ilimitado, marca blanca completa, código fuente, soporte 24/7.
+
+4. GARANTÍA
+   El software se proporciona "tal cual", sin garantía de ningún tipo. 
+   El propietario no se hace responsable de daños directos o indirectos 
+   derivados del uso del software.
+
+5. DEVOLUCIONES
+   Se ofrece una garantía de devolución de 30 días si el producto no funciona 
+   como se describe en la documentación.
+
+6. CONTACTO
+   Para consultas sobre licencias: licencias@cymaticstudio.com
+   Para soporte técnico: soporte@cymaticstudio.com
+
+© 2026 CYMATIC STUDIO. Todos los derechos reservados.
