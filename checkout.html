@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYMATIC STUDIO · Checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #020308;
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 100px 20px 40px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .back-link {
+            display: inline-block;
+            color: #00ffcc;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ffcc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .panel {
+            background: rgba(2, 3, 8, 0.7);
+            border: 1px solid rgba(0, 255, 204, 0.06);
+            border-radius: 16px;
+            padding: 30px;
+        }
+        .panel h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel h2 .icon { font-size: 1.5rem; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0,255,204,0.05);
+        }
+        .btn-pay {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #00ffcc, #a855f7);
+            color: #000;
+        }
+        .btn-pay:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 30px rgba(0,255,204,0.2);
+        }
+        .clabe-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(0,255,204,0.05);
+            margin: 12px 0;
+        }
+        .clabe-box .label {
+            font-size: 0.6rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .clabe-box .clabe {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00ffcc;
+            margin: 6px 0;
+            letter-spacing: 2px;
+            word-break: break-all;
+        }
+        .btn-copy {
+            background: rgba(0,255,204,0.05);
+            border: 1px solid rgba(0,255,204,0.1);
+            color: #00ffcc;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+        .btn-copy:hover { background: rgba(0,255,204,0.1); }
+        .upload-area {
+            border: 2px dashed rgba(0,255,204,0.08);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .upload-area:hover { border-color: rgba(0,255,204,0.2); }
+        .note-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,255,204,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(0,255,204,0.05);
+        }
+        .note-box p { color: #94a3b8; font-size: 0.85rem; }
+        .note-box a { color: #00ffcc; }
+        @media (max-width: 768px) {
+            .checkout-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+    <h1>💳 Checkout</h1>
+    <p class="subtitle">Elige tu método de pago y completa tu compra.</p>
+
+    <div class="checkout-grid">
+        <div class="panel">
+            <h2><span class="icon">⚡</span> Pago Inmediato</h2>
+            <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:16px;">
+                Paga con tarjeta de crédito o PayPal. Recibes tu licencia al instante.
+            </p>
+            <div class="form-group">
+                <label>Versión seleccionada</label>
+                <select id="versionSelect">
+                    <option value="v3.0">Cymatic Core (v3.0) – $19 USD</option>
+                    <option value="v8.0" selected>Quantum Bloom (v8.0) – $79 USD</option>
+                    <option value="v15.0">Omni-Sensory (v15.0) – $249 USD</option>
+                    <option value="v21.5">Singular Quantum (v21.5) – $499 USD</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" placeholder="tu@email.com" id="emailAuto">
+            </div>
+            <button class="btn-pay" onclick="pagoAutomatizado()">💳 Pagar con Tarjeta / PayPal</button>
+            <p style="color:#475569; font-size:0.7rem; margin-top:8px; text-align:center;">
+                🔒 Pago seguro · Procesado por Stripe
+            </p>
+        </div>
+
+        <div class="panel" style="border-color: rgba(168,85,247,0.15);">
+            <h2><span class="icon">🏦</span> Pago por Transferencia</h2>
+            <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:16px;">
+                Realiza una transferencia bancaria directa y envía el comprobante.
+            </p>
+            <div class="form-group">
+                <label>Versión seleccionada</label>
+                <select id="versionManual">
+                    <option value="v3.0">Cymatic Core (v3.0) – $19 USD</option>
+                    <option value="v8.0" selected>Quantum Bloom (v8.0) – $79 USD</option>
+                    <option value="v15.0">Omni-Sensory (v15.0) – $249 USD</option>
+                    <option value="v21.5">Singular Quantum (v21.5) – $499 USD</option>
+                </select>
+            </div>
+            <div class="clabe-box">
+                <div class="label">🏛️ CLABE Interbancaria</div>
+                <div class="clabe" id="clabeDisplay">002438701524066473</div>
+                <button class="btn-copy" onclick="copiarCLABE()">📋 Copiar CLABE</button>
+            </div>
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" placeholder="tu@email.com" id="emailManual">
+            </div>
+            <div class="form-group">
+                <label>📎 Comprobante de pago</label>
+                <div class="upload-area" onclick="document.getElementById('comprobanteInput').click()">
+                    <span style="font-size:2rem;">📤</span>
+                    <p style="color:#94a3b8; font-size:0.8rem;">Haz clic para subir tu comprobante</p>
+                    <input type="file" id="comprobanteInput" style="display:none;" accept="image/*,.pdf">
+                </div>
+            </div>
+            <button class="btn-pay" style="background:linear-gradient(135deg,#a855f7,#ff00cc);" onclick="pagoManual()">📩 Enviar Comprobante</button>
+            <p style="color:#475569; font-size:0.7rem; margin-top:8px; text-align:center;">
+                📧 Recibirás tu licencia en <strong style="color:#00ffcc;">24 horas</strong> después de verificar el pago.
+            </p>
+        </div>
+    </div>
+
+    <div class="note-box">
+        <p>💡 <strong style="color:#fff;">¿Problemas con el pago?</strong> 
+            <a href="faq.html">Visita nuestra sección de preguntas frecuentes</a> o escríbenos a 
+            <strong style="color:#a855f7;">soporte@cymaticstudio.com</strong>
+        </p>
+    </div>
+</div>
+
+<script>
+    function copiarCLABE() {
+        const clabe = document.getElementById('clabeDisplay').textContent.replace(/\s/g, '');
+        navigator.clipboard.writeText(clabe).then(() => {
+            const btn = document.querySelector('.btn-copy');
+            btn.textContent = '✅ ¡Copiado!';
+            setTimeout(() => { btn.textContent = '📋 Copiar CLABE'; }, 3000);
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = clabe;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        });
+    }
+    function pagoAutomatizado() {
+        const version = document.getElementById('versionSelect').value;
+        const email = document.getElementById('emailAuto').value;
+        if (!email) { alert('Por favor, ingresa tu correo electrónico.'); return; }
+        alert(`🔒 Redirigiendo a pasarela de pago para ${version}...\n📧 Licencia enviada a: ${email}`);
+        window.location.href = 'dashboard.html?licencia=PRO-2026-' + version.toUpperCase();
+    }
+    function pagoManual() {
+        const version = document.getElementById('versionManual').value;
+        const email = document.getElementById('emailManual').value;
+        const fileInput = document.getElementById('comprobanteInput');
+        if (!email) { alert('Por favor, ingresa tu correo electrónico.'); return; }
+        if (!fileInput.files || fileInput.files.length === 0) { alert('Por favor, sube el comprobante de pago.'); return; }
+        alert(`📩 Comprobante enviado para ${version}.\n📧 Revisaremos tu pago en: ${email}\n⏳ Recibirás tu licencia en 24 horas.`);
+        window.location.href = 'dashboard.html?licencia=PRO-2026-' + version.toUpperCase();
+    }
+    // Cargar versión desde URL
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const version = urlParams.get('version');
+        if (version) {
+            const select = document.getElementById('versionSelect');
+            for (let opt of select.options) {
+                if (opt.value === version) { opt.selected = true; break; }
+            }
+            const selectManual = document.getElementById('versionManual');
+            for (let opt of selectManual.options) {
+                if (opt.value === version) { opt.selected = true; break; }
+            }
+        }
+    })();
+</script>
+
+</body>
+</html>
