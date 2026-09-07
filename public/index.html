@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="folio" content="5204160405358537">
+    <meta name="sha" content="a4ff808e">
+    <title>CYMATIC STUDIO v23.0 · Quantum Core</title>
+    <link rel="stylesheet" href="/assets/css/quantum-core.css">
+    <style>
+        /* Estilos específicos de la demo */
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+        .demo-grid .glass-card {
+            padding: var(--space-sm);
+            text-align: center;
+        }
+        .tab-panel {
+            display: none;
+            padding: var(--space-md) 0;
+        }
+        .tab-panel:first-of-type {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas de fondo (motor 3D) -->
+    <canvas id="canvas-kronos"></canvas>
+
+    <!-- ===== ESTUDIO WRAPPER ===== -->
+    <div class="studio-wrapper">
+
+        <!-- PANEL IZQUIERDO -->
+        <div class="panel-left glass-card interactive" style="display:flex;flex-direction:column;gap:var(--space-md);">
+            <div class="card-title"><span class="accent">⚡ CONTROL CENTRAL</span></div>
+
+            <!-- Tema toggle -->
+            <div style="display:flex;align-items:center;gap:var(--space-sm);">
+                <span class="text-sm text-muted">🌓 Tema</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle" data-theme-toggle>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex gap-sm flex-wrap">
+                <button class="btn-kronos primary interactive-trigger" onclick="CymaticNotify.success('Sistema operativo al 100%')">✅ Éxito</button>
+                <button class="btn-kronos danger interactive-trigger" onclick="CymaticNotify.error('Fallo crítico en el nodo')">❌ Error</button>
+                <button class="btn-kronos secondary interactive-trigger" onclick="CymaticNotify.warn('Advertencia: batería baja')">⚠️ Advertencia</button>
+                <button class="btn-kronos ghost interactive-trigger" onclick="CymaticNotify.info('Información: nueva versión disponible')">ℹ️ Info</button>
+            </div>
+
+            <!-- Modal demo -->
+            <button class="btn-kronos secondary" onclick="CymaticModal.open('demoModal')">📂 Abrir Modal</button>
+
+            <div class="flex gap-sm">
+                <span class="badge-cyber cyan">● Activo</span>
+                <span class="badge-cyber magenta">● Procesando</span>
+                <span class="badge-cyber gold">● Advertencia</span>
+            </div>
+        </div>
+
+        <!-- PANEL CENTRAL (PESTAÑAS) -->
+        <div class="panel-center glass-card interactive tabs-container">
+            <div class="card-title"><span class="accent">🌀 MONITOR CUÁNTICO</span></div>
+
+            <!-- Navegación de pestañas -->
+            <div class="tabs">
+                <button class="tab active" data-target="panel-canvas">Canvas</button>
+                <button class="tab" data-target="panel-osc">Osciloscopio</button>
+                <button class="tab" data-target="panel-logs">Logs</button>
+            </div>
+
+            <!-- Contenido de pestañas -->
+            <div id="panel-canvas" class="tab-panel">
+                <div style="aspect-ratio:16/9; background:var(--bg-tertiary); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font-family:var(--font-mono);">
+                    🎨 Visualización 3D (Canvas)
+                </div>
+            </div>
+            <div id="panel-osc" class="tab-panel">
+                <div style="aspect-ratio:16/9; background:var(--bg-tertiary); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font-family:var(--font-mono);">
+                    📊 Osciloscopio XY
+                </div>
+            </div>
+            <div id="panel-logs" class="tab-panel">
+                <div style="background:var(--bg-tertiary); border-radius:var(--radius-sm); padding:var(--space-md); max-height:200px; overflow-y:auto; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-secondary);">
+                    <div>[10:28:19] CRISTAL #3 D:3 X:1.94 A:25Hz [4fff88bc]</div>
+                    <div>[10:28:19] CRISTAL #2 D:3 X:4.37 A:24Hz [4fff88bc]</div>
+                    <div>[10:28:18] CRISTAL #1 D:3 X:-0.89 A:36Hz [4fff88bc]</div>
+                    <div>[7:49:51] CRISTAL #1 D:3 X:1.75 A:10Hz [4fff88bc]</div>
+                    <div style="color:var(--color-cyan);">[7:35:04] TRACE: KRONOS-TRACE-PVA-520416049535857</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL DERECHO (DEMO DE COMPONENTES) -->
+        <div class="panel-right glass-card interactive">
+            <div class="card-title"><span class="accent">🧩 COMPONENTES</span></div>
+
+            <div class="flex flex-col gap-md">
+                <!-- Avatar -->
+                <div class="flex items-center gap-sm">
+                    <div class="avatar md cyan">CK</div>
+                    <div>
+                        <div class="text-sm font-mono" style="font-weight:700;">Cymatic Kernel</div>
+                        <div class="text-xs text-muted">v23.0 · Quantum Core</div>
+                    </div>
+                </div>
+
+                <!-- Tooltip -->
+                <div class="tooltip">
+                    <button class="btn-kronos sm">🛠️ Hover me</button>
+                    <span class="tooltip-text">🔮 Herramienta cuántica activa</span>
+                </div>
+
+                <!-- Switch -->
+                <div class="flex items-center gap-sm">
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="text-sm text-muted">Modo Cuántico</span>
+                </div>
+
+                <!-- Input -->
+                <div class="form-group">
+                    <label>Nodo ID</label>
+                    <input type="text" class="input-field" placeholder="Ingresa el identificador...">
+                </div>
+
+                <!-- Select -->
+                <div class="form-group">
+                    <label>Protocolo</label>
+                    <select class="select-field">
+                        <option>TCP/IP</option>
+                        <option>UDP</option>
+                        <option selected>WebSocket</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE DEMO ===== -->
+    <div class="modal-overlay" id="demoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">🔮 Información del Nodo</div>
+                <button class="modal-close" onclick="CymaticModal.close('demoModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Folio:</strong> 5204160405358537</p>
+                <p><strong>SHA:</strong> a4ff808e</p>
+                <p><strong>Trace:</strong> KRONOS-TRACE-PVA</p>
+                <p class="text-sm text-muted mt-sm">Este nodo está sincronizado con el motor cimático principal.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-kronos secondary" onclick="CymaticModal.close('demoModal')">Cerrar</button>
+                <button class="btn-kronos primary" onclick="CymaticNotify.success('Nodo verificado correctamente'); CymaticModal.close('demoModal')">Verificar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER (ya está en el JS) ===== -->
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="/assets/js/quantum-core.js"></script>
+
+    <!-- Inicialización de ejemplo -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Al cargar, mostrar un toast de bienvenida
+            setTimeout(() => {
+                CymaticNotify.success('🚀 CYMATIC STUDIO v23.0 Quantum Core cargado');
+            }, 500);
+
+            // Sincronizar toggle de tema con el switch
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.checked = CymaticTheme.get() === 'light';
+                themeToggle.addEventListener('change', function() {
+                    CymaticTheme.toggle();
+                    this.checked = CymaticTheme.get() === 'light';
+                });
+                // Actualizar cuando cambie el tema desde otros lugares
+                document.addEventListener('themeChange', (e) => {
+                    themeToggle.checked = e.detail.theme === 'light';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
