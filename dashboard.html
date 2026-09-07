@@ -141,6 +141,25 @@
             font-family: 'Inter', sans-serif;
         }
         .btn-support:hover { transform: scale(1.02); box-shadow: 0 10px 25px rgba(168,85,247,0.2); }
+        .contact-info {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(0,255,204,0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(0,255,204,0.05);
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .contact-info a { color: #00ffcc; }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #475569;
+            font-size: 0.7rem;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            padding-top: 20px;
+        }
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .license-card { flex-direction: column; align-items: flex-start; }
@@ -205,7 +224,16 @@
         </p>
         <textarea placeholder="Describe el problema que estás experimentando..."></textarea>
         <button class="btn-support">📩 Enviar reporte</button>
+        <div class="contact-info">
+            <p>📧 Soporte: <a href="mailto:marco.a.rojas.v@hotmail.com">marco.a.rojas.v@hotmail.com</a> · <a href="mailto:proyectokronos@hotmail.com">proyectokronos@hotmail.com</a></p>
+            <p>📱 WhatsApp: <a href="https://wa.me/527225862335" target="_blank">+52 722 586 2335</a></p>
+        </div>
     </div>
+
+    <footer class="footer">
+        <p>© 2026 CYMATIC STUDIO · <a href="licencias.html">Licencias</a> · <a href="faq.html">FAQ</a></p>
+        <div style="font-size:0.6rem; color:#334155; margin-top:4px;">Folio: 5204160405358537 · SHA: a4ff808e</div>
+    </footer>
 </div>
 
 <script>
@@ -229,6 +257,5 @@
         console.log('🔑 Licencia actual:', document.getElementById('licenseKeyDisplay').textContent);
     })();
 </script>
-
 </body>
 </html>
