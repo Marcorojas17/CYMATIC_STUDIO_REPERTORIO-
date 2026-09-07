@@ -23,6 +23,7 @@
             font-size: 0.8rem;
             margin-bottom: 30px;
         }
+        .back-link:hover { text-decoration: underline; }
         h1 {
             font-size: 2.5rem;
             font-weight: 900;
@@ -153,6 +154,25 @@
         }
         .note-box p { color: #94a3b8; font-size: 0.85rem; }
         .note-box a { color: #00ffcc; }
+        .contact-info {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(168,85,247,0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(168,85,247,0.08);
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .contact-info a { color: #00ffcc; }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #475569;
+            font-size: 0.7rem;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            padding-top: 20px;
+        }
         @media (max-width: 768px) {
             .checkout-grid { grid-template-columns: 1fr; }
             h1 { font-size: 2rem; }
@@ -167,6 +187,7 @@
     <p class="subtitle">Elige tu método de pago y completa tu compra.</p>
 
     <div class="checkout-grid">
+        <!-- Panel Automatizado -->
         <div class="panel">
             <h2><span class="icon">⚡</span> Pago Inmediato</h2>
             <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:16px;">
@@ -191,6 +212,7 @@
             </p>
         </div>
 
+        <!-- Panel Manual con CLABE -->
         <div class="panel" style="border-color: rgba(168,85,247,0.15);">
             <h2><span class="icon">🏦</span> Pago por Transferencia</h2>
             <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:16px;">
@@ -207,8 +229,9 @@
             </div>
             <div class="clabe-box">
                 <div class="label">🏛️ CLABE Interbancaria</div>
-                <div class="clabe" id="clabeDisplay">002438701524066473</div>
+                <div class="clabe" id="clabeDisplay">0024 3870 1524 0664 73</div>
                 <button class="btn-copy" onclick="copiarCLABE()">📋 Copiar CLABE</button>
+                <div style="font-size:0.6rem; color:#64748b; margin-top:4px;">BBVA México</div>
             </div>
             <div class="form-group">
                 <label>Correo electrónico</label>
@@ -226,18 +249,28 @@
             <p style="color:#475569; font-size:0.7rem; margin-top:8px; text-align:center;">
                 📧 Recibirás tu licencia en <strong style="color:#00ffcc;">24 horas</strong> después de verificar el pago.
             </p>
+            <div class="contact-info">
+                <p>📧 Envía tu comprobante a: <a href="mailto:marco.a.rojas.v@hotmail.com">marco.a.rojas.v@hotmail.com</a> o <a href="mailto:proyectokronos@hotmail.com">proyectokronos@hotmail.com</a></p>
+                <p>📱 Contacto por <a href="https://wa.me/527225862335" target="_blank">WhatsApp: +52 722 586 2335</a></p>
+            </div>
         </div>
     </div>
 
     <div class="note-box">
         <p>💡 <strong style="color:#fff;">¿Problemas con el pago?</strong> 
             <a href="faq.html">Visita nuestra sección de preguntas frecuentes</a> o escríbenos a 
-            <strong style="color:#a855f7;">soporte@cymaticstudio.com</strong>
+            <strong style="color:#a855f7;">marco.a.rojas.v@hotmail.com</strong>
         </p>
     </div>
+
+    <footer class="footer">
+        <p>© 2026 CYMATIC STUDIO · <a href="licencias.html">Licencias</a> · <a href="faq.html">FAQ</a> · <a href="dashboard.html">Dashboard</a></p>
+        <div style="font-size:0.6rem; color:#334155; margin-top:4px;">Folio: 5204160405358537 · SHA: a4ff808e</div>
+    </footer>
 </div>
 
 <script>
+    // === CLABE COPIAR ===
     function copiarCLABE() {
         const clabe = document.getElementById('clabeDisplay').textContent.replace(/\s/g, '');
         navigator.clipboard.writeText(clabe).then(() => {
@@ -253,6 +286,7 @@
             document.body.removeChild(textarea);
         });
     }
+    // === PAGO AUTOMATIZADO ===
     function pagoAutomatizado() {
         const version = document.getElementById('versionSelect').value;
         const email = document.getElementById('emailAuto').value;
@@ -260,6 +294,7 @@
         alert(`🔒 Redirigiendo a pasarela de pago para ${version}...\n📧 Licencia enviada a: ${email}`);
         window.location.href = 'dashboard.html?licencia=PRO-2026-' + version.toUpperCase();
     }
+    // === PAGO MANUAL ===
     function pagoManual() {
         const version = document.getElementById('versionManual').value;
         const email = document.getElementById('emailManual').value;
@@ -285,6 +320,5 @@
         }
     })();
 </script>
-
 </body>
 </html>
