@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYMATIC STUDIO v1.0 · Quantum Seed</title>
+    <style>
+        /* Estilos básicos para la demo */
+        body { margin: 0; overflow: hidden; background: #020308; color: #00ffcc; font-family: 'Courier New', monospace; }
+        canvas { display: block; width: 100%; height: 100vh; }
+        .watermark {
+            position: fixed; bottom: 20px; right: 20px;
+            font-size: 0.7rem; opacity: 0.3;
+            color: #00ffcc; letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .licencia-info {
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            color: #00ffcc;
+            border: 1px solid rgba(0,255,204,0.1);
+            backdrop-filter: blur(4px);
+            z-index: 10;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== SISTEMA DE LICENCIA ===== -->
+<script>
+    // ============================================================
+    //  SISTEMA DE LICENCIA · CYMATIC STUDIO v1.0
+    //  Protege el código contra uso no autorizado
+    // ============================================================
+    
+    (function() {
+        const LICENCIA = {
+            PRODUCTO: 'CYMATIC STUDIO Quantum Seed',
+            VERSION: 'v1.0',
+            CLAVE_PUBLICA: 'CYMATIC-PUB-KEY-2026-A4FF808E',
+            DEMO_LICENSE: 'DEMO-2026-CYMATIC'
+        };
+
+        function obtenerLicencia() {
+            let licencia = localStorage.getItem('cymatic_licencia');
+            if (licencia) return licencia;
+            licencia = sessionStorage.getItem('cymatic_licencia');
+            if (licencia) return licencia;
+            const urlParams = new URLSearchParams(window.location.search);
+            licencia = urlParams.get('licencia');
+            if (licencia) {
+                localStorage.setItem('cymatic_licencia', licencia);
+                return licencia;
+            }
+            return null;
+        }
+
+        function validarLicencia(clave) {
+            if (!clave) return false;
+            if (clave === LICENCIA.DEMO_LICENSE) return true;
+            if (clave.length === 24 && clave.startsWith('CYMATIC-')) return true;
+            return false;
+        }
+
+        function mostrarBloqueo(mensaje) {
+            document.body.innerHTML = `
+                <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;background:#020308;color:#ff4d6d;font-family:'Courier New',monospace;padding:20px;text-align:center;">
+                    <div style="font-size:4rem;margin-bottom:20px;">🔒</div>
+                    <h1 style="font-size:2rem;margin-bottom:10px;color:#ff4d6d;">${mensaje}</h1>
+                    <p style="color:#64748b;font-size:1rem;max-width:500px;line-height:1.6;">
+                        Este software requiere una licencia válida para funcionar.
+                        <br><br>
+                        <span style="color:#00ffcc;">Contacta a soporte@cymaticstudio.com</span>
+                        <br><br>
+                        <button onclick="ingresarLicencia()" style="background:linear-gradient(135deg,#00ffcc,#a855f7);color:#000;border:none;padding:12px 32px;border-radius:40px;font-weight:800;cursor:pointer;font-size:1rem;font-family:'Courier New',monospace;margin-top:10px;">
+                            🔑 Ingresar clave de licencia
+                        </button>
+                    </p>
+                </div>
+            `;
+        }
+
+        window.ingresarLicencia = function() {
+            const clave = prompt('🔑 Ingresa tu clave de licencia de CYMATIC STUDIO:');
+            if (clave) {
+                localStorage.setItem('cymatic_licencia', clave);
+                location.reload();
+            }
+        };
+
+        // Ejecutar validación
+        const licencia = obtenerLicencia();
+        if (!licencia || !validarLicencia(licencia)) {
+            mostrarBloqueo('⚠️ Licencia no encontrada o inválida');
+        } else {
+            console.log('✅ Licencia válida para CYMATIC STUDIO v1.0');
+            // Mostrar estado en la interfaz
+            const info = document.createElement('div');
+            info.className = 'licencia-info';
+            info.textContent = '✅ Licencia activa · ' + LICENCIA.VERSION;
+            document.body.appendChild(info);
+        }
+    })();
+</script>
+
+<!-- ===== MOTOR CIMÁTICO BÁSICO ===== -->
+<canvas id="canvas"></canvas>
+<div class="watermark">CYMATIC STUDIO · v1.0 · Quantum Seed</div>
+
+<script>
+    // Solo se ejecuta si la licencia es válida
+    (function() {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        let mouse = { x: width/2, y: height/2 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        let phase = 0;
+        const lineCount = 30;
+
+        function animate() {
+            ctx.fillStyle = 'rgba(2, 3, 8, 0.08)';
+            ctx.fillRect(0, 0, width, height);
+
+            phase += 0.005;
+
+            for (let i = 0; i < lineCount; i++) {
+                const y = (height / lineCount) * i;
+                ctx.beginPath();
+                ctx.lineWidth = i % 2 === 0 ? 1.5 : 0.5;
+                const grad = ctx.createLinearGradient(0, 0, width, 0);
+                grad.addColorStop(0, 'rgba(168, 85, 247, 0.1)');
+                grad.addColorStop(mouse.x / width, 'rgba(0, 255, 204, 0.5)');
+                grad.addColorStop(1, 'rgba(255, 0, 204, 0.1)');
+                ctx.strokeStyle = grad;
+
+                for (let x = 0; x < width; x += 8) {
+                    const dist = Math.abs(x - mouse.x);
+                    const influence = Math.max(0, (200 - dist) / 200);
+                    const wave = Math.sin(x * 0.008 + phase + i * 0.2) * 20;
+                    const mouseWave = Math.sin(x * 0.02 + phase * 2) * (30 * influence) * (1 - Math.abs(mouse.y - y) / height);
+                    const yPos = y + wave + mouseWave;
+                    if (x === 0) ctx.moveTo(x, yPos);
+                    else ctx.lineTo(x, yPos);
+                }
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+        console.log('🚀 CYMATIC STUDIO v1.0 · Quantum Seed cargado correctamente.');
+    })();
+</script>
+</body>
+</html>
