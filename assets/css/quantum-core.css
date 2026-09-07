@@ -1,13 +1,15 @@
 /* ==========================================================================
-   CYMATIC STUDIO v23.0 QUANTUM CORE · SISTEMA DE DISEÑO DEFINITIVO
+   CYMATIC STUDIO v23.1 QUANTUM CORE+ · SISTEMA DE DISEÑO DEFINITIVO
    ==========================================================================
-   MEJORAS ESTRATÉGICAS (v22.3 → v23.0):
-   ✅ Sistema de temas con toggle manual + persistencia (localStorage)
-   ✅ Variables CSS organizadas por categorías (Tokens, Componentes, Utilidades)
-   ✅ Sistema de iconos SVG inline (modular y escalable)
-   ✅ Documentación integrada en el código (guía de estilos)
-   ✅ Optimización de performance (will-change, transform, GPU-accelerated)
-   ✅ Accesibilidad mejorada (ARIA roles, focus-visible, contraste)
+   MEJORAS (v23.0 → v23.1):
+   ✅ Utilidades de texto y espaciado completas
+   ✅ Transiciones suaves para tabs y modales
+   ✅ Estilos :disabled para controles
+   ✅ Soporte landscape en móviles
+   ✅ Grid extendido (5 y 6 columnas)
+   ✅ Variables de espaciado adicionales
+   ✅ Modo alto contraste (accesibilidad)
+   ✅ Documentación mejorada
    ========================================================================== */
 
 /* ============================================================
@@ -15,7 +17,7 @@
    ============================================================ */
 
 :root {
-    /* --- Paleta de Colores (Neón) --- */
+    /* --- Colores de Acento --- */
     --color-cyan: #00ffcc;
     --color-magenta: #ff00cc;
     --color-purple: #9d4edd;
@@ -39,7 +41,7 @@
     --shadow-glow: 0 0 40px rgba(0, 255, 204, 0.06);
     --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.9);
 
-    /* --- Tema Claro (preferencia del sistema) --- */
+    /* --- Tema Claro --- */
     --theme-light-bg-primary: #f0f2f8;
     --theme-light-bg-secondary: #e2e8f0;
     --theme-light-bg-tertiary: #cbd5e1;
@@ -58,7 +60,7 @@
     --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
-    /* --- Espaciado (Escala 4px) --- */
+    /* --- Espaciado (Escala 4px) – expandida --- */
     --space-xs: 4px;
     --space-sm: 8px;
     --space-md: 16px;
@@ -66,6 +68,7 @@
     --space-xl: 32px;
     --space-2xl: 48px;
     --space-3xl: 64px;
+    --space-4xl: 96px;
 
     /* --- Radios --- */
     --radius-sm: 6px;
@@ -88,13 +91,13 @@
     --transition-med: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-slow: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
-    /* --- Íconos SVG (inline) --- */
-    --icon-check: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E";
-    --icon-close: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E";
-    --icon-chevron: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E";
+    /* --- Alto Contraste (Accesibilidad) --- */
+    --high-contrast-bg: #000000;
+    --high-contrast-text: #ffffff;
+    --high-contrast-border: #ffffff;
 }
 
-/* --- Aplicación de temas vía clase (para toggle manual) --- */
+/* --- Aplicación de temas --- */
 body.theme-light {
     --bg-primary: var(--theme-light-bg-primary);
     --bg-secondary: var(--theme-light-bg-secondary);
@@ -112,14 +115,28 @@ body.theme-light {
     color-scheme: light;
 }
 
-body.theme-dark {
-    color-scheme: dark;
-    /* Ya están definidas en :root, solo reseteamos */
+/* --- Modo alto contraste (accesibilidad) --- */
+body.high-contrast {
+    --bg-primary: var(--high-contrast-bg);
+    --bg-secondary: var(--high-contrast-bg);
+    --bg-tertiary: var(--high-contrast-bg);
+    --bg-elevated: var(--high-contrast-bg);
+    --text-primary: var(--high-contrast-text);
+    --text-secondary: var(--high-contrast-text);
+    --text-tertiary: var(--high-contrast-text);
+    --border-color: var(--high-contrast-border);
+    --border-hover: var(--high-contrast-border);
+    --color-cyan: #00ffff;
+    --color-magenta: #ff00ff;
+    --color-purple: #bb88ff;
+    --color-gold: #ffcc00;
+    --color-red: #ff6666;
+    --color-green: #66ff88;
 }
 
-/* --- Toggle automático por preferencia del sistema --- */
-@media (prefers-color-scheme: light) and (not(.theme-dark)) {
-    body:not(.theme-light) {
+/* --- Preferencia del sistema --- */
+@media (prefers-color-scheme: light) {
+    body:not(.theme-dark):not(.theme-light) {
         --bg-primary: var(--theme-light-bg-primary);
         --bg-secondary: var(--theme-light-bg-secondary);
         --bg-tertiary: var(--theme-light-bg-tertiary);
@@ -213,21 +230,18 @@ textarea,
 
 .custom-cursor {
     position: fixed;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border: 2px solid var(--color-cyan);
     border-radius: 50%;
     pointer-events: none;
     z-index: var(--z-cursor);
     transform: translate(-50%, -50%);
     transition: width var(--transition-fast), height var(--transition-fast),
-                border-color var(--transition-fast), background var(--transition-fast),
-                box-shadow var(--transition-fast);
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.15);
-    backdrop-filter: blur(2px);
-    background: rgba(0, 255, 204, 0.02);
+                border-color var(--transition-fast), background var(--transition-fast);
     will-change: transform;
     contain: layout paint style;
+    box-shadow: var(--shadow-glow);
 }
 
 .custom-cursor::after {
@@ -240,26 +254,22 @@ textarea,
     background: var(--color-cyan);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--color-cyan);
     transition: background var(--transition-fast);
 }
 
 .custom-cursor.hover {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     border-color: var(--color-magenta);
-    background: rgba(255, 0, 204, 0.05);
-    box-shadow: 0 0 40px rgba(255, 0, 204, 0.15);
+    background: rgba(255, 0, 204, 0.04);
 }
 .custom-cursor.hover::after {
     background: var(--color-magenta);
 }
 
 .custom-cursor.click {
-    width: 12px;
-    height: 12px;
+    transform: translate(-50%, -50%) scale(0.75);
     border-color: var(--color-gold);
-    background: rgba(240, 160, 48, 0.1);
 }
 
 /* Ocultar en móviles (sin mouse) */
@@ -317,7 +327,7 @@ h6,
     letter-spacing: 0.05em;
 }
 
-/* --- Escalas de texto --- */
+/* --- Escalas de texto (completas) --- */
 .text-xs {
     font-size: 0.6rem;
     line-height: 1.4;
@@ -379,6 +389,8 @@ h6,
 .text-green {
     color: var(--color-green);
 }
+
+/* --- Alineación --- */
 .text-center {
     text-align: center;
 }
@@ -388,6 +400,11 @@ h6,
 .text-left {
     text-align: left;
 }
+.text-justify {
+    text-align: justify;
+}
+
+/* --- Transformación --- */
 .text-uppercase {
     text-transform: uppercase;
 }
@@ -397,6 +414,8 @@ h6,
 .text-capitalize {
     text-transform: capitalize;
 }
+
+/* --- Truncado --- */
 .text-nowrap {
     white-space: nowrap;
 }
@@ -407,10 +426,10 @@ h6,
 }
 
 /* ============================================================
-   5. SISTEMA DE ESPACIADO Y LAYOUT
+   5. SISTEMA DE ESPACIADO COMPLETO
    ============================================================ */
 
-/* --- Margin --- */
+/* --- Margin (completo) --- */
 .m-xs {
     margin: var(--space-xs);
 }
@@ -432,6 +451,13 @@ h6,
 .m-3xl {
     margin: var(--space-3xl);
 }
+.m-4xl {
+    margin: var(--space-4xl);
+}
+.m-auto {
+    margin: auto;
+}
+
 .mt-xs {
     margin-top: var(--space-xs);
 }
@@ -450,6 +476,16 @@ h6,
 .mt-2xl {
     margin-top: var(--space-2xl);
 }
+.mt-3xl {
+    margin-top: var(--space-3xl);
+}
+.mt-4xl {
+    margin-top: var(--space-4xl);
+}
+.mt-auto {
+    margin-top: auto;
+}
+
 .mb-xs {
     margin-bottom: var(--space-xs);
 }
@@ -468,6 +504,16 @@ h6,
 .mb-2xl {
     margin-bottom: var(--space-2xl);
 }
+.mb-3xl {
+    margin-bottom: var(--space-3xl);
+}
+.mb-4xl {
+    margin-bottom: var(--space-4xl);
+}
+.mb-auto {
+    margin-bottom: auto;
+}
+
 .ml-xs {
     margin-left: var(--space-xs);
 }
@@ -483,6 +529,19 @@ h6,
 .ml-xl {
     margin-left: var(--space-xl);
 }
+.ml-2xl {
+    margin-left: var(--space-2xl);
+}
+.ml-3xl {
+    margin-left: var(--space-3xl);
+}
+.ml-4xl {
+    margin-left: var(--space-4xl);
+}
+.ml-auto {
+    margin-left: auto;
+}
+
 .mr-xs {
     margin-right: var(--space-xs);
 }
@@ -498,6 +557,19 @@ h6,
 .mr-xl {
     margin-right: var(--space-xl);
 }
+.mr-2xl {
+    margin-right: var(--space-2xl);
+}
+.mr-3xl {
+    margin-right: var(--space-3xl);
+}
+.mr-4xl {
+    margin-right: var(--space-4xl);
+}
+.mr-auto {
+    margin-right: auto;
+}
+
 .mx-auto {
     margin-left: auto;
     margin-right: auto;
@@ -522,6 +594,19 @@ h6,
     margin-left: var(--space-xl);
     margin-right: var(--space-xl);
 }
+.mx-2xl {
+    margin-left: var(--space-2xl);
+    margin-right: var(--space-2xl);
+}
+.mx-3xl {
+    margin-left: var(--space-3xl);
+    margin-right: var(--space-3xl);
+}
+.mx-4xl {
+    margin-left: var(--space-4xl);
+    margin-right: var(--space-4xl);
+}
+
 .my-xs {
     margin-top: var(--space-xs);
     margin-bottom: var(--space-xs);
@@ -542,8 +627,20 @@ h6,
     margin-top: var(--space-xl);
     margin-bottom: var(--space-xl);
 }
+.my-2xl {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
+}
+.my-3xl {
+    margin-top: var(--space-3xl);
+    margin-bottom: var(--space-3xl);
+}
+.my-4xl {
+    margin-top: var(--space-4xl);
+    margin-bottom: var(--space-4xl);
+}
 
-/* --- Padding --- */
+/* --- Padding (completo) --- */
 .p-xs {
     padding: var(--space-xs);
 }
@@ -565,6 +662,10 @@ h6,
 .p-3xl {
     padding: var(--space-3xl);
 }
+.p-4xl {
+    padding: var(--space-4xl);
+}
+
 .pt-xs {
     padding-top: var(--space-xs);
 }
@@ -580,6 +681,16 @@ h6,
 .pt-xl {
     padding-top: var(--space-xl);
 }
+.pt-2xl {
+    padding-top: var(--space-2xl);
+}
+.pt-3xl {
+    padding-top: var(--space-3xl);
+}
+.pt-4xl {
+    padding-top: var(--space-4xl);
+}
+
 .pb-xs {
     padding-bottom: var(--space-xs);
 }
@@ -595,6 +706,16 @@ h6,
 .pb-xl {
     padding-bottom: var(--space-xl);
 }
+.pb-2xl {
+    padding-bottom: var(--space-2xl);
+}
+.pb-3xl {
+    padding-bottom: var(--space-3xl);
+}
+.pb-4xl {
+    padding-bottom: var(--space-4xl);
+}
+
 .px-xs {
     padding-left: var(--space-xs);
     padding-right: var(--space-xs);
@@ -615,6 +736,19 @@ h6,
     padding-left: var(--space-xl);
     padding-right: var(--space-xl);
 }
+.px-2xl {
+    padding-left: var(--space-2xl);
+    padding-right: var(--space-2xl);
+}
+.px-3xl {
+    padding-left: var(--space-3xl);
+    padding-right: var(--space-3xl);
+}
+.px-4xl {
+    padding-left: var(--space-4xl);
+    padding-right: var(--space-4xl);
+}
+
 .py-xs {
     padding-top: var(--space-xs);
     padding-bottom: var(--space-xs);
@@ -635,6 +769,22 @@ h6,
     padding-top: var(--space-xl);
     padding-bottom: var(--space-xl);
 }
+.py-2xl {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+}
+.py-3xl {
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-3xl);
+}
+.py-4xl {
+    padding-top: var(--space-4xl);
+    padding-bottom: var(--space-4xl);
+}
+
+/* ============================================================
+   6. FLEX Y GRID (COMPLETO)
+   ============================================================ */
 
 /* --- Flex --- */
 .flex {
@@ -714,6 +864,7 @@ h6,
 .grid-cols-6 {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
+
 .gap-xs {
     gap: var(--space-xs);
 }
@@ -732,8 +883,17 @@ h6,
 .gap-2xl {
     gap: var(--space-2xl);
 }
+.gap-3xl {
+    gap: var(--space-3xl);
+}
+.gap-4xl {
+    gap: var(--space-4xl);
+}
 
-/* --- Tamaños --- */
+/* ============================================================
+   7. TAMAÑOS Y POSICIONAMIENTO
+   ============================================================ */
+
 .w-full {
     width: 100%;
 }
@@ -770,11 +930,13 @@ h6,
 .max-w-3xl {
     max-width: 1100px;
 }
+.max-w-4xl {
+    max-width: 1300px;
+}
 .max-w-full {
     max-width: 100%;
 }
 
-/* --- Posicionamiento --- */
 .relative {
     position: relative;
 }
@@ -812,7 +974,6 @@ h6,
     z-index: 40;
 }
 
-/* --- Overflow --- */
 .overflow-hidden {
     overflow: hidden;
 }
@@ -829,46 +990,11 @@ h6,
     overflow: scroll;
 }
 
-/* --- Bordes --- */
-.border {
-    border: 1px solid var(--border-color);
-}
-.border-0 {
-    border: none;
-}
-.border-cyan {
-    border-color: var(--color-cyan);
-}
-.border-magenta {
-    border-color: var(--color-magenta);
-}
-.border-purple {
-    border-color: var(--color-purple);
-}
-.border-red {
-    border-color: var(--color-red);
-}
-.border-green {
-    border-color: var(--color-green);
-}
-.rounded-sm {
-    border-radius: var(--radius-sm);
-}
-.rounded-md {
-    border-radius: var(--radius-md);
-}
-.rounded-lg {
-    border-radius: var(--radius-lg);
-}
-.rounded-full {
-    border-radius: var(--radius-full);
-}
-
 /* ============================================================
-   6. COMPONENTES UI (GLASSMORPHISM + CONTROLES)
+   8. COMPONENTES BASE (GLASSMORPHISM + BOTONES + INPUTS)
    ============================================================ */
 
-/* --- Tarjetas de Vidrio --- */
+/* --- Tarjetas Glassmorphism --- */
 .glass-card {
     background: var(--bg-elevated);
     backdrop-filter: blur(20px);
@@ -901,7 +1027,7 @@ h6,
     color: var(--color-cyan);
 }
 
-/* --- Botones KRONOS (Sistema completo) --- */
+/* --- Botones KRONOS (completos) --- */
 .btn-kronos {
     display: inline-flex;
     align-items: center;
@@ -1006,20 +1132,7 @@ h6,
     justify-content: center;
 }
 
-/* --- Inputs y Formularios --- */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    width: 100%;
-}
-.form-group label {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+/* --- Inputs --- */
 .input-field {
     width: 100%;
     background: var(--bg-tertiary);
@@ -1049,7 +1162,11 @@ h6,
 .input-field.success {
     border-color: var(--color-green);
 }
+.input-field::placeholder {
+    color: var(--text-tertiary);
+}
 
+/* --- Select --- */
 .select-field {
     appearance: none;
     -webkit-appearance: none;
@@ -1075,144 +1192,73 @@ h6,
     opacity: 0.4;
     cursor: not-allowed;
 }
-
-/* --- Checkbox --- */
-.checkbox-wrapper {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    cursor: pointer;
-}
-.checkbox-wrapper input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    background: var(--bg-tertiary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    position: relative;
-    flex-shrink: 0;
-}
-.checkbox-wrapper input[type="checkbox"]:checked {
-    border-color: var(--color-cyan);
-    background: var(--color-cyan);
-}
-.checkbox-wrapper input[type="checkbox"]:checked::after {
-    content: '✓';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--bg-primary);
-    font-size: 12px;
-    font-weight: 700;
-}
-.checkbox-wrapper input[type="checkbox"]:focus-visible {
-    outline: 2px solid var(--color-cyan);
-    outline-offset: 2px;
-}
-.checkbox-wrapper input[type="checkbox"]:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-/* --- Radio --- */
-.radio-wrapper {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    cursor: pointer;
-}
-.radio-wrapper input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--border-color);
-    border-radius: 50%;
-    background: var(--bg-tertiary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    position: relative;
-    flex-shrink: 0;
-}
-.radio-wrapper input[type="radio"]:checked {
-    border-color: var(--color-cyan);
-}
-.radio-wrapper input[type="radio"]:checked::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-cyan);
-}
-.radio-wrapper input[type="radio"]:focus-visible {
-    outline: 2px solid var(--color-cyan);
-    outline-offset: 2px;
-}
-.radio-wrapper input[type="radio"]:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-/* --- Switch (Neón Toggle) --- */
-.switch {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    flex-shrink: 0;
-    cursor: pointer;
-}
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-.switch .slider {
-    position: absolute;
-    inset: 0;
-    background: var(--text-tertiary);
-    border-radius: var(--radius-full);
-    transition: var(--transition-med);
-    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4);
-}
-.switch .slider::before {
-    content: '';
-    position: absolute;
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background: var(--bg-primary);
-    border-radius: 50%;
-    transition: var(--transition-med);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-.switch input:checked+.slider {
-    background: var(--color-cyan);
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
-}
-.switch input:checked+.slider::before {
-    transform: translateX(20px);
-}
-.switch input:focus-visible+.slider {
-    outline: 2px solid var(--color-cyan);
-    outline-offset: 2px;
-}
-.switch input:disabled+.slider {
-    opacity: 0.4;
-    cursor: not-allowed;
+.select-field option {
+    background: var(--bg-secondary);
 }
 
 /* ============================================================
-   7. COMPONENTES AVANZADOS
+   9. SISTEMA DE TABS CON TRANSICIONES
+   ============================================================ */
+
+.tabs-nav {
+    display: flex;
+    gap: var(--space-xs);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-md);
+    overflow-x: auto;
+}
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-med);
+    cursor: pointer;
+    white-space: nowrap;
+}
+.tab-btn:hover:not(.active):not(:disabled) {
+    color: var(--text-primary);
+}
+.tab-btn.active {
+    color: var(--color-cyan);
+    border-bottom-color: var(--color-cyan);
+}
+.tab-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.tab-btn:focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: -2px;
+}
+
+.tab-content {
+    display: none;
+    animation: tabFadeIn var(--transition-med) forwards;
+}
+.tab-content.active {
+    display: block;
+}
+
+@keyframes tabFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   10. BADGES, AVATARES Y TOOLTIPS
    ============================================================ */
 
 /* --- Badges --- */
@@ -1317,7 +1363,7 @@ h6,
     object-fit: cover;
 }
 
-/* --- Tooltips Dinámicos --- */
+/* --- Tooltips --- */
 .tooltip {
     position: relative;
     display: inline-block;
@@ -1391,48 +1437,98 @@ h6,
     border-right-color: var(--bg-secondary);
 }
 
-/* --- Tabs --- */
-.tabs {
+/* ============================================================
+   11. SISTEMA DE TOASTS (MEJORADO)
+   ============================================================ */
+
+#toast-container {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    z-index: var(--z-toast);
     display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: var(--space-md);
-    overflow-x: auto;
+    flex-direction: column;
+    gap: var(--space-sm);
+    pointer-events: none;
+    max-width: 380px;
+    width: 100%;
 }
-.tabs .tab {
-    padding: var(--space-sm) var(--space-lg);
+.toast {
+    background: var(--bg-secondary);
+    border-left: 4px solid var(--color-cyan);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    box-shadow: var(--shadow-card);
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-med);
-    border-bottom: 2px solid transparent;
-    background: none;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    white-space: nowrap;
+    color: var(--text-primary);
+    min-width: 240px;
+    pointer-events: auto;
+    animation: toastSlideIn var(--transition-med) forwards;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
-.tabs .tab:hover:not(.active):not(:disabled) {
+.toast .toast-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.toast .toast-content {
+    flex: 1;
+    word-break: break-word;
+}
+.toast .toast-close {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 var(--space-xs);
+    line-height: 1;
+    transition: color var(--transition-fast);
+}
+.toast .toast-close:hover {
     color: var(--text-primary);
 }
-.tabs .tab.active {
-    color: var(--color-cyan);
-    border-bottom-color: var(--color-cyan);
+.toast.success {
+    border-left-color: var(--color-green);
 }
-.tabs .tab:focus-visible {
-    outline: 2px solid var(--color-cyan);
-    outline-offset: -2px;
+.toast.error {
+    border-left-color: var(--color-red);
 }
-.tabs .tab:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+.toast.warn {
+    border-left-color: var(--color-gold);
+}
+.toast.hide {
+    animation: toastSlideOut var(--transition-med) forwards;
 }
 
-/* --- Modals --- */
+@keyframes toastSlideIn {
+    from {
+        transform: translateX(120%) scale(0.96);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+@keyframes toastSlideOut {
+    from {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(40px) scale(0.96);
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   12. MODALES
+   ============================================================ */
+
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1513,93 +1609,9 @@ h6,
 }
 
 /* ============================================================
-   8. SISTEMA DE TOASTS (CON COLA DE PRIORIDAD)
+   13. ANIMACIONES Y MICRO-INTERACCIONES
    ============================================================ */
 
-#toast-container {
-    position: fixed;
-    top: var(--space-lg);
-    right: var(--space-lg);
-    z-index: var(--z-toast);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    pointer-events: none;
-    max-width: 380px;
-    width: 100%;
-}
-.toast {
-    background: var(--bg-secondary);
-    border-left: 4px solid var(--color-cyan);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    box-shadow: var(--shadow-card);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--text-primary);
-    min-width: 240px;
-    pointer-events: auto;
-    animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    transition: opacity var(--transition-fast), transform var(--transition-fast);
-}
-.toast .toast-icon {
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.toast .toast-content {
-    flex: 1;
-}
-.toast .toast-close {
-    background: none;
-    border: none;
-    color: var(--text-tertiary);
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 0 var(--space-xs);
-    line-height: 1;
-}
-.toast.success {
-    border-left-color: var(--color-green);
-}
-.toast.error {
-    border-left-color: var(--color-red);
-}
-.toast.warn {
-    border-left-color: var(--color-gold);
-}
-.toast.hide {
-    animation: toastSlideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes toastSlideIn {
-    from {
-        transform: translateX(120%) scale(0.96);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0) scale(1);
-        opacity: 1;
-    }
-}
-@keyframes toastSlideOut {
-    from {
-        transform: translateX(0) scale(1);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(40px) scale(0.96);
-        opacity: 0;
-    }
-}
-
-/* ============================================================
-   9. ANIMACIONES Y MICRO-INTERACCIONES
-   ============================================================ */
-
-/* --- Pulse Dot --- */
 .pulse-dot {
     display: inline-block;
     width: 6px;
@@ -1621,7 +1633,6 @@ h6,
     }
 }
 
-/* --- Spinner --- */
 .spinner {
     display: inline-block;
     width: 24px;
@@ -1647,7 +1658,6 @@ h6,
     }
 }
 
-/* --- Skeleton --- */
 .skeleton {
     background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--text-tertiary) 50%, var(--bg-tertiary) 75%);
     background-size: 200% 100%;
@@ -1677,7 +1687,6 @@ h6,
     }
 }
 
-/* --- Utilidades de animación --- */
 .fade-in {
     animation: fadeIn var(--transition-med) forwards;
 }
@@ -1691,17 +1700,15 @@ h6,
 }
 
 /* ============================================================
-   10. ACCESIBILIDAD
+   14. ACCESIBILIDAD
    ============================================================ */
 
-/* Focus visible para navegación por teclado */
 :focus-visible {
     outline: 2px solid var(--color-cyan);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
 }
 
-/* Skip link para navegación rápida */
 .skip-link {
     position: absolute;
     top: -100%;
@@ -1718,7 +1725,7 @@ h6,
 }
 
 /* ============================================================
-   11. RESPONSIVE BREAKPOINTS
+   15. RESPONSIVE BREAKPOINTS (MEJORADOS)
    ============================================================ */
 
 @media (max-width: 1200px) {
@@ -1759,7 +1766,7 @@ h6,
         order: 3;
     }
     #toast-container {
-        top: var(--space-sm);
+        bottom: var(--space-sm);
         right: var(--space-sm);
         max-width: calc(100% - var(--space-sm) * 2);
     }
@@ -1787,7 +1794,9 @@ h6,
     }
     .grid-cols-2,
     .grid-cols-3,
-    .grid-cols-4 {
+    .grid-cols-4,
+    .grid-cols-5,
+    .grid-cols-6 {
         grid-template-columns: 1fr;
     }
     .modal-overlay .modal {
@@ -1814,26 +1823,62 @@ h6,
     .toast {
         min-width: auto;
         font-size: 0.6rem;
+        padding: var(--space-xs) var(--space-sm);
     }
 }
 
 /* ============================================================
-   12. GUÍA DE ESTILOS (DOCUMENTACIÓN)
+   16. SOPORTE LANDSCAPE (MÓVILES)
+   ============================================================ */
+
+@media (max-width: 992px) and (orientation: landscape) {
+    .studio-wrapper {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        height: 100vh;
+        overflow-y: auto;
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+    .studio-wrapper .panel-left {
+        order: 1;
+    }
+    .studio-wrapper .panel-center {
+        order: 2;
+        grid-column: span 2;
+    }
+    .studio-wrapper .panel-right {
+        order: 3;
+    }
+    .glass-card {
+        padding: var(--space-sm);
+    }
+    h1 {
+        font-size: 1.2rem;
+    }
+    .btn-kronos {
+        font-size: 0.5rem;
+        padding: 4px 8px;
+    }
+}
+
+/* ============================================================
+   17. GUÍA DE ESTILOS
    ============================================================ */
 
 /*
-   📖 GUÍA DE ESTILO CYMATIC STUDIO v23.0
+   📖 GUÍA DE ESTILO CYMATIC STUDIO v23.1
 
    🎨 PALETA DE COLORES:
-   - Cyan: #00ffcc (Acento principal)
-   - Magenta: #ff00cc (Acento secundario)
-   - Purple: #9d4edd (Acento terciario)
+   - Cyan: #00ffcc (Principal)
+   - Magenta: #ff00cc (Secundario)
+   - Purple: #9d4edd (Terciario)
    - Gold: #f0a030 (Advertencia)
    - Red: #ff4d6d (Error)
    - Green: #44dd88 (Éxito)
 
    📐 SISTEMA DE ESPACIADO (Escala 4px):
-   xs: 4px, sm: 8px, md: 16px, lg: 24px, xl: 32px, 2xl: 48px, 3xl: 64px
+   xs: 4px, sm: 8px, md: 16px, lg: 24px, xl: 32px, 2xl: 48px, 3xl: 64px, 4xl: 96px
 
    🔤 TIPOGRAFÍA:
    - Títulos y cuerpo: Space Grotesk
@@ -1849,7 +1894,7 @@ h6,
    - .tooltip (Tooltips con 4 posiciones)
    - .toast (Notificaciones con cola)
    - .modal-overlay (Ventanas modales)
-   - .tabs (Pestañas)
+   - .tabs-nav (Pestañas)
    - .spinner, .skeleton, .pulse-dot (Feedback)
 
    📱 BREAKPOINTS:
@@ -1858,6 +1903,7 @@ h6,
    - 768-992px: Tablets
    - 480-768px: Móviles grandes
    - <480px: Móviles pequeños
+   - Landscape: Orientación horizontal en móviles
 
    🔧 UTILIDADES:
    - Espaciado: .m-*, .p-*, .gap-*, .mx-*, .my-*, .px-*, .py-*
@@ -1869,5 +1915,5 @@ h6,
 */
 
 /* ============================================================
-   13. FIN DEL SISTEMA
+   18. FIN DEL SISTEMA
    ========================================================================== */
