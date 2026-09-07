@@ -51,6 +51,16 @@
             text-decoration: none;
         }
         .btn-nav:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(0,255,204,0.3); }
+        /* Traductor */
+        .translator-wrap {
+            display: flex; align-items: center; gap: 6px;
+            margin-left: auto;
+        }
+        .translator-wrap span { font-size: 0.7rem; color: #64748b; font-family: 'JetBrains Mono', monospace; }
+        #google_translate_element { min-width: 120px; }
+        .goog-te-gadget-simple { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(0,255,204,0.08) !important; border-radius: 8px !important; padding: 4px 8px !important; font-family: 'Inter', sans-serif !important; }
+        .goog-te-gadget-simple .goog-te-menu-value { color: #e2e8f0 !important; font-weight: 600 !important; }
+        .goog-te-gadget-simple .goog-te-menu-value span { color: #e2e8f0 !important; }
         .hero {
             padding: 140px 40px 60px;
             text-align: center;
@@ -174,6 +184,8 @@
             .hero h1 { font-size: 2.5rem; }
             .hero { padding: 120px 16px 40px; }
             .nav-links a { font-size: 0.65rem; }
+            .translator-wrap { margin-left: 0; width: 100%; justify-content: flex-start; }
+            #google_translate_element { min-width: 100px; }
         }
     </style>
 </head>
@@ -188,6 +200,11 @@
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="dashboard.html">Mi Cuenta</a></li>
     </ul>
+    <!-- ===== TRADUCTOR ===== -->
+    <div class="translator-wrap">
+        <span>🌐</span>
+        <div id="google_translate_element"></div>
+    </div>
     <a href="checkout.html" class="btn-nav">🎵 Adquirir Licencia</a>
 </header>
 
@@ -235,6 +252,19 @@
     <p>© 2026 CYMATIC STUDIO · <a href="licencias.html">Licencias</a> · <a href="faq.html">FAQ</a> · <a href="dashboard.html">Dashboard</a></p>
     <div class="trace">Folio: 5204160405358537 · SHA: a4ff808e · Trace: KRONOS-TRACE-PVA</div>
 </footer>
+
+<!-- ===== GOOGLE TRANSLATE ===== -->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'es',
+            includedLanguages: 'es,en,fr,de,it,pt,ru,ja,zh-CN,ar,hi,ko',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
