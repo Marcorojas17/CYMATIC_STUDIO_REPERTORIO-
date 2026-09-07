@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="folio" content="5204160405358537">
+    <meta name="sha" content="a4ff808e">
+    <meta name="trace" content="KRONOS-TRACE-PVA-5204160405358537-KRONOS-MT01JAAF">
+    <title>CYMATIC STUDIO · Motor de Visualización Cuántica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #020308;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        .header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            padding: 16px 40px;
+            background: rgba(2, 3, 8, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 204, 0.08);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 12px;
+        }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem; font-weight: 900;
+            background: linear-gradient(135deg, #00ffcc, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo small { font-size: 0.6rem; font-weight: 400; -webkit-text-fill-color: rgba(255,255,255,0.2); }
+        .nav-links { display: flex; gap: 24px; align-items: center; list-style: none; flex-wrap: wrap; }
+        .nav-links a {
+            color: #94a3b8; font-size: 0.8rem; font-weight: 600;
+            text-decoration: none; transition: 0.3s;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+        .nav-links a:hover { color: #00ffcc; text-shadow: 0 0 15px rgba(0,255,204,0.3); }
+        .btn-nav {
+            background: linear-gradient(135deg, #00ffcc, #a855f7);
+            color: #000; padding: 8px 20px; border-radius: 40px;
+            font-weight: 800; font-size: 0.75rem; border: none;
+            cursor: pointer; transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+        }
+        .btn-nav:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(0,255,204,0.3); }
+        .hero {
+            padding: 140px 40px 60px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 40%, rgba(0,255,204,0.02) 0%, transparent 60%);
+        }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(0,255,204,0.05);
+            border: 1px solid rgba(0,255,204,0.12);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #00ffcc;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 20%, #00ffcc 50%, #a855f7 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.05;
+            max-width: 800px;
+            margin: 0 auto 16px;
+            letter-spacing: -1px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-hero {
+            padding: 16px 40px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-hero.primary {
+            background: linear-gradient(135deg, #00ffcc, #a855f7);
+            color: #000;
+            box-shadow: 0 10px 30px rgba(0,255,204,0.15);
+        }
+        .btn-hero.primary:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,255,204,0.3); }
+        .btn-hero.secondary {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .btn-hero.secondary:hover { border-color: #00ffcc; background: rgba(0,255,204,0.03); }
+        .demo-section {
+            max-width: 1200px; margin: 0 auto 60px; padding: 0 20px;
+        }
+        .demo-frame {
+            background: rgba(2, 3, 8, 0.7);
+            border: 1px solid rgba(0, 255, 204, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            position: relative;
+        }
+        .demo-frame iframe {
+            width: 100%; height: 100%; border: none;
+        }
+        .demo-label {
+            position: absolute; bottom: 20px; left: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            color: #00ffcc;
+            border: 1px solid rgba(0,255,204,0.1);
+            backdrop-filter: blur(4px);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 1px;
+        }
+        .features {
+            max-width: 1200px; margin: 0 auto 60px; padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: rgba(2, 3, 8, 0.7);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 30px 24px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .feature-card:hover { border-color: rgba(0,255,204,0.15); transform: translateY(-4px); }
+        .feature-card .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+        .feature-card h3 { font-size: 1.1rem; margin-bottom: 6px; }
+        .feature-card p { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; }
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            color: #475569;
+            font-size: 0.75rem;
+        }
+        .footer a { color: #00ffcc; text-decoration: none; }
+        .footer .trace {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: #334155;
+            margin-top: 4px;
+        }
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero { padding: 120px 16px 40px; }
+            .nav-links a { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">CYMATIC <small>STUDIO</small></div>
+    <ul class="nav-links">
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="licencias.html">Licencias</a></li>
+        <li><a href="checkout.html">Comprar</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="dashboard.html">Mi Cuenta</a></li>
+    </ul>
+    <a href="checkout.html" class="btn-nav">🎵 Adquirir Licencia</a>
+</header>
+
+<section class="hero">
+    <div class="badge">⚡ MOTOR DE VISUALIZACIÓN CUÁNTICA</div>
+    <h1>Transforma el sonido<br>en geometría sagrada</h1>
+    <p>El primer estudio de visualización musical cuántica en tiempo real. Ideal para artistas, músicos y creadores de contenido inmersivo.</p>
+    <div class="hero-buttons">
+        <a href="checkout.html" class="btn-hero primary">🛒 Adquirir Licencia</a>
+        <a href="#demo" class="btn-hero secondary">▶ Ver Demo en Vivo</a>
+    </div>
+</section>
+
+<section class="demo-section" id="demo">
+    <div class="demo-frame">
+        <iframe src="versions/cymatic_v1.0.html"></iframe>
+        <div class="demo-label">⚡ Cymatic Engine v1.0 · Demo interactiva</div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <span class="icon">🌀</span>
+        <h3>5 Geometrías Sagradas</h3>
+        <p>Chladni, Toroide, Metatrón, Flor de la Vida, Merkaba. Reactividad al audio en tiempo real.</p>
+    </div>
+    <div class="feature-card">
+        <span class="icon">🎵</span>
+        <h3>Audio Reactivo Avanzado</h3>
+        <p>Micrófono, sintetizador integrado o carga de archivos MP3/WAV. Análisis FFT multipunto.</p>
+    </div>
+    <div class="feature-card">
+        <span class="icon">🎨</span>
+        <h3>Paletas de Emoción</h3>
+        <p>Cambia el color y la atmósfera al instante con paletas asociadas a sentimientos.</p>
+    </div>
+    <div class="feature-card">
+        <span class="icon">💎</span>
+        <h3>Exportación de Fotogramas</h3>
+        <p>Genera secuencias de PNG de alta resolución para usar en tus proyectos creativos.</p>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>© 2026 CYMATIC STUDIO · <a href="licencias.html">Licencias</a> · <a href="faq.html">FAQ</a> · <a href="dashboard.html">Dashboard</a></p>
+    <div class="trace">Folio: 5204160405358537 · SHA: a4ff808e · Trace: KRONOS-TRACE-PVA</div>
+</footer>
+
+</body>
+</html>
