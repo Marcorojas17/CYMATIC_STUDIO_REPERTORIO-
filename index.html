@@ -51,16 +51,24 @@
             text-decoration: none;
         }
         .btn-nav:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(0,255,204,0.3); }
-        /* Traductor */
         .translator-wrap {
             display: flex; align-items: center; gap: 6px;
-            margin-left: auto;
         }
         .translator-wrap span { font-size: 0.7rem; color: #64748b; font-family: 'JetBrains Mono', monospace; }
         #google_translate_element { min-width: 120px; }
         .goog-te-gadget-simple { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(0,255,204,0.08) !important; border-radius: 8px !important; padding: 4px 8px !important; font-family: 'Inter', sans-serif !important; }
         .goog-te-gadget-simple .goog-te-menu-value { color: #e2e8f0 !important; font-weight: 600 !important; }
         .goog-te-gadget-simple .goog-te-menu-value span { color: #e2e8f0 !important; }
+        .whatsapp-float {
+            position: fixed; bottom: 30px; left: 30px; z-index: 999;
+            background: #25D366; border-radius: 50%; width: 60px; height: 60px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.3);
+            transition: 0.3s; cursor: pointer;
+            text-decoration: none;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(37, 211, 102, 0.5); }
+        .whatsapp-float svg { width: 32px; height: 32px; fill: #fff; }
         .hero {
             padding: 140px 40px 60px;
             text-align: center;
@@ -179,6 +187,16 @@
             color: #334155;
             margin-top: 4px;
         }
+        .footer .contact-info {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        .footer .contact-info a { color: #00ffcc; }
         @media (max-width: 768px) {
             .header { padding: 12px 16px; }
             .hero h1 { font-size: 2.5rem; }
@@ -186,10 +204,18 @@
             .nav-links a { font-size: 0.65rem; }
             .translator-wrap { margin-left: 0; width: 100%; justify-content: flex-start; }
             #google_translate_element { min-width: 100px; }
+            .whatsapp-float { width: 50px; height: 50px; bottom: 20px; left: 20px; }
+            .whatsapp-float svg { width: 26px; height: 26px; }
+            .footer .contact-info { flex-direction: column; gap: 6px; }
         }
     </style>
 </head>
 <body>
+
+<!-- ===== WHATSAPP FLOTANTE ===== -->
+<a href="https://wa.me/527225862335?text=Hola%20CYMATIC%20STUDIO%2C%20quiero%20informaci%C3%B3n%20sobre%20las%20licencias." target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <header class="header">
     <div class="logo">CYMATIC <small>STUDIO</small></div>
@@ -200,7 +226,6 @@
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="dashboard.html">Mi Cuenta</a></li>
     </ul>
-    <!-- ===== TRADUCTOR ===== -->
     <div class="translator-wrap">
         <span>🌐</span>
         <div id="google_translate_element"></div>
@@ -251,9 +276,14 @@
 <footer class="footer">
     <p>© 2026 CYMATIC STUDIO · <a href="licencias.html">Licencias</a> · <a href="faq.html">FAQ</a> · <a href="dashboard.html">Dashboard</a></p>
     <div class="trace">Folio: 5204160405358537 · SHA: a4ff808e · Trace: KRONOS-TRACE-PVA</div>
+    <div class="contact-info">
+        <span>📧 <a href="mailto:marco.a.rojas.v@hotmail.com">marco.a.rojas.v@hotmail.com</a></span>
+        <span>📧 <a href="mailto:proyectokronos@hotmail.com">proyectokronos@hotmail.com</a></span>
+        <span>📱 <a href="https://wa.me/527225862335" target="_blank">+52 722 586 2335 (WhatsApp)</a></span>
+        <span>🏦 CLABE: 0024 3870 1524 0664 73</span>
+    </div>
 </footer>
 
-<!-- ===== GOOGLE TRANSLATE ===== -->
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
