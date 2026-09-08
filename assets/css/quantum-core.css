@@ -1,15 +1,14 @@
 /* ==========================================================================
-   CYMATIC STUDIO v23.1 QUANTUM CORE+ · SISTEMA DE DISEÑO DEFINITIVO
+   CYMATIC STUDIO v23.2 QUANTUM CORE++ · SISTEMA DE DISEÑO DEFINITIVO
    ==========================================================================
-   MEJORAS (v23.0 → v23.1):
-   ✅ Utilidades de texto y espaciado completas
-   ✅ Transiciones suaves para tabs y modales
-   ✅ Estilos :disabled para controles
-   ✅ Soporte landscape en móviles
-   ✅ Grid extendido (5 y 6 columnas)
-   ✅ Variables de espaciado adicionales
-   ✅ Modo alto contraste (accesibilidad)
-   ✅ Documentación mejorada
+   MEJORAS (v23.1 → v23.2):
+   ✅ Utilidades de display (block, inline, inline-block, hidden)
+   ✅ Utilidades de opacidad (opacity-25, 50, 75, 100)
+   ✅ Utilidades de z-index (z-50, z-auto)
+   ✅ Soporte para dropdowns y accordions
+   ✅ Transiciones mejoradas para tabs y paneles
+   ✅ Accesibilidad mejorada (aria-expanded dinámico)
+   ✅ Documentación con ejemplos de uso
    ========================================================================== */
 
 /* ============================================================
@@ -56,11 +55,16 @@
     --theme-light-shadow-glow: 0 0 40px rgba(0, 255, 204, 0.08);
     --theme-light-shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.12);
 
+    /* --- Alto Contraste (Accesibilidad) --- */
+    --high-contrast-bg: #000000;
+    --high-contrast-text: #ffffff;
+    --high-contrast-border: #ffffff;
+
     /* --- Tipografía --- */
     --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
-    /* --- Espaciado (Escala 4px) – expandida --- */
+    /* --- Espaciado (Escala 4px) --- */
     --space-xs: 4px;
     --space-sm: 8px;
     --space-md: 16px;
@@ -90,11 +94,6 @@
     --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-med: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-slow: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-
-    /* --- Alto Contraste (Accesibilidad) --- */
-    --high-contrast-bg: #000000;
-    --high-contrast-text: #ffffff;
-    --high-contrast-border: #ffffff;
 }
 
 /* --- Aplicación de temas --- */
@@ -115,7 +114,6 @@ body.theme-light {
     color-scheme: light;
 }
 
-/* --- Modo alto contraste (accesibilidad) --- */
 body.high-contrast {
     --bg-primary: var(--high-contrast-bg);
     --bg-secondary: var(--high-contrast-bg);
@@ -124,8 +122,13 @@ body.high-contrast {
     --text-primary: var(--high-contrast-text);
     --text-secondary: var(--high-contrast-text);
     --text-tertiary: var(--high-contrast-text);
+    --text-inverse: var(--high-contrast-bg);
     --border-color: var(--high-contrast-border);
     --border-hover: var(--high-contrast-border);
+    --shadow-card: none;
+    --shadow-glow: none;
+    --shadow-elevated: none;
+    color-scheme: dark;
     --color-cyan: #00ffff;
     --color-magenta: #ff00ff;
     --color-purple: #bb88ff;
@@ -134,7 +137,6 @@ body.high-contrast {
     --color-green: #66ff88;
 }
 
-/* --- Preferencia del sistema --- */
 @media (prefers-color-scheme: light) {
     body:not(.theme-dark):not(.theme-light) {
         --bg-primary: var(--theme-light-bg-primary);
@@ -182,7 +184,6 @@ body {
     cursor: none;
 }
 
-/* Restaurar cursor en elementos interactivos */
 button,
 a,
 input,
@@ -238,10 +239,12 @@ textarea,
     z-index: var(--z-cursor);
     transform: translate(-50%, -50%);
     transition: width var(--transition-fast), height var(--transition-fast),
-                border-color var(--transition-fast), background var(--transition-fast);
+                border-color var(--transition-fast), background var(--transition-fast),
+                opacity var(--transition-fast);
     will-change: transform;
     contain: layout paint style;
     box-shadow: var(--shadow-glow);
+    background: rgba(0, 255, 204, 0.02);
 }
 
 .custom-cursor::after {
@@ -272,6 +275,10 @@ textarea,
     border-color: var(--color-gold);
 }
 
+.custom-cursor.hidden {
+    opacity: 0;
+}
+
 /* Ocultar en móviles (sin mouse) */
 @media (max-width: 992px) {
     body {
@@ -283,7 +290,7 @@ textarea,
 }
 
 /* ============================================================
-   4. SISTEMA DE TIPOGRAFÍA COMPLETO
+   4. SISTEMA DE TIPOGRAFÍA Y UTILIDADES DE TEXTO
    ============================================================ */
 
 h1,
@@ -327,7 +334,6 @@ h6,
     letter-spacing: 0.05em;
 }
 
-/* --- Escalas de texto (completas) --- */
 .text-xs {
     font-size: 0.6rem;
     line-height: 1.4;
@@ -361,7 +367,6 @@ h6,
     line-height: 1.1;
 }
 
-/* --- Utilidades de texto --- */
 .text-mono {
     font-family: var(--font-mono);
 }
@@ -390,7 +395,6 @@ h6,
     color: var(--color-green);
 }
 
-/* --- Alineación --- */
 .text-center {
     text-align: center;
 }
@@ -403,8 +407,6 @@ h6,
 .text-justify {
     text-align: justify;
 }
-
-/* --- Transformación --- */
 .text-uppercase {
     text-transform: uppercase;
 }
@@ -414,8 +416,6 @@ h6,
 .text-capitalize {
     text-transform: capitalize;
 }
-
-/* --- Truncado --- */
 .text-nowrap {
     white-space: nowrap;
 }
@@ -426,10 +426,10 @@ h6,
 }
 
 /* ============================================================
-   5. SISTEMA DE ESPACIADO COMPLETO
+   5. SISTEMA DE ESPACIADO (COMPLETO)
    ============================================================ */
 
-/* --- Margin (completo) --- */
+/* --- Margin --- */
 .m-xs {
     margin: var(--space-xs);
 }
@@ -640,7 +640,7 @@ h6,
     margin-bottom: var(--space-4xl);
 }
 
-/* --- Padding (completo) --- */
+/* --- Padding --- */
 .p-xs {
     padding: var(--space-xs);
 }
@@ -782,89 +782,7 @@ h6,
     padding-bottom: var(--space-4xl);
 }
 
-/* ============================================================
-   6. FLEX Y GRID (COMPLETO)
-   ============================================================ */
-
-/* --- Flex --- */
-.flex {
-    display: flex;
-}
-.flex-col {
-    flex-direction: column;
-}
-.flex-row {
-    flex-direction: row;
-}
-.flex-wrap {
-    flex-wrap: wrap;
-}
-.flex-nowrap {
-    flex-wrap: nowrap;
-}
-.flex-1 {
-    flex: 1;
-}
-.flex-grow {
-    flex-grow: 1;
-}
-.flex-shrink-0 {
-    flex-shrink: 0;
-}
-.items-center {
-    align-items: center;
-}
-.items-start {
-    align-items: flex-start;
-}
-.items-end {
-    align-items: flex-end;
-}
-.items-stretch {
-    align-items: stretch;
-}
-.justify-center {
-    justify-content: center;
-}
-.justify-start {
-    justify-content: flex-start;
-}
-.justify-end {
-    justify-content: flex-end;
-}
-.justify-between {
-    justify-content: space-between;
-}
-.justify-around {
-    justify-content: space-around;
-}
-.justify-evenly {
-    justify-content: space-evenly;
-}
-
-/* --- Grid --- */
-.grid {
-    display: grid;
-}
-.grid-cols-1 {
-    grid-template-columns: 1fr;
-}
-.grid-cols-2 {
-    grid-template-columns: 1fr 1fr;
-}
-.grid-cols-3 {
-    grid-template-columns: 1fr 1fr 1fr;
-}
-.grid-cols-4 {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-.grid-cols-5 {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-}
-.grid-cols-6 {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-}
-
+/* --- Gap --- */
 .gap-xs {
     gap: var(--space-xs);
 }
@@ -891,7 +809,140 @@ h6,
 }
 
 /* ============================================================
-   7. TAMAÑOS Y POSICIONAMIENTO
+   6. FLEX Y GRID (COMPLETO)
+   ============================================================ */
+
+.flex {
+    display: flex;
+}
+.flex-col {
+    flex-direction: column;
+}
+.flex-row {
+    flex-direction: row;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.flex-nowrap {
+    flex-wrap: nowrap;
+}
+.flex-1 {
+    flex: 1;
+}
+.flex-grow {
+    flex-grow: 1;
+}
+.flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+.items-center {
+    align-items: center;
+}
+.items-start {
+    align-items: flex-start;
+}
+.items-end {
+    align-items: flex-end;
+}
+.items-stretch {
+    align-items: stretch;
+}
+
+.justify-center {
+    justify-content: center;
+}
+.justify-start {
+    justify-content: flex-start;
+}
+.justify-end {
+    justify-content: flex-end;
+}
+.justify-between {
+    justify-content: space-between;
+}
+.justify-around {
+    justify-content: space-around;
+}
+.justify-evenly {
+    justify-content: space-evenly;
+}
+
+.grid {
+    display: grid;
+}
+.grid-cols-1 {
+    grid-template-columns: 1fr;
+}
+.grid-cols-2 {
+    grid-template-columns: 1fr 1fr;
+}
+.grid-cols-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.grid-cols-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.grid-cols-5 {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.grid-cols-6 {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+/* ============================================================
+   7. UTILIDADES DE DISPLAY Y OPACIDAD (NUEVAS)
+   ============================================================ */
+
+.block {
+    display: block;
+}
+.inline {
+    display: inline;
+}
+.inline-block {
+    display: inline-block;
+}
+.hidden {
+    display: none;
+}
+
+.opacity-25 {
+    opacity: 0.25;
+}
+.opacity-50 {
+    opacity: 0.5;
+}
+.opacity-75 {
+    opacity: 0.75;
+}
+.opacity-100 {
+    opacity: 1;
+}
+
+/* --- Z-Index --- */
+.z-10 {
+    z-index: 10;
+}
+.z-20 {
+    z-index: 20;
+}
+.z-30 {
+    z-index: 30;
+}
+.z-40 {
+    z-index: 40;
+}
+.z-50 {
+    z-index: 50;
+}
+.z-auto {
+    z-index: auto;
+}
+
+/* ============================================================
+   8. TAMAÑOS Y POSICIONAMIENTO
    ============================================================ */
 
 .w-full {
@@ -961,18 +1012,6 @@ h6,
 .bottom-0 {
     bottom: 0;
 }
-.z-10 {
-    z-index: 10;
-}
-.z-20 {
-    z-index: 20;
-}
-.z-30 {
-    z-index: 30;
-}
-.z-40 {
-    z-index: 40;
-}
 
 .overflow-hidden {
     overflow: hidden;
@@ -991,10 +1030,9 @@ h6,
 }
 
 /* ============================================================
-   8. COMPONENTES BASE (GLASSMORPHISM + BOTONES + INPUTS)
+   9. COMPONENTES BASE (GLASSMORPHISM + BOTONES + INPUTS)
    ============================================================ */
 
-/* --- Tarjetas Glassmorphism --- */
 .glass-card {
     background: var(--bg-elevated);
     backdrop-filter: blur(20px);
@@ -1027,7 +1065,7 @@ h6,
     color: var(--color-cyan);
 }
 
-/* --- Botones KRONOS (completos) --- */
+/* --- Botones --- */
 .btn-kronos {
     display: inline-flex;
     align-items: center;
@@ -1068,7 +1106,6 @@ h6,
     outline-offset: 2px;
 }
 
-/* Variantes */
 .btn-kronos.primary {
     background: var(--color-cyan);
     color: var(--bg-primary);
@@ -1197,7 +1234,7 @@ h6,
 }
 
 /* ============================================================
-   9. SISTEMA DE TABS CON TRANSICIONES
+   10. TABS MEJORADOS CON TRANSICIONES Y ARIA
    ============================================================ */
 
 .tabs-nav {
@@ -1221,6 +1258,7 @@ h6,
     transition: all var(--transition-med);
     cursor: pointer;
     white-space: nowrap;
+    position: relative;
 }
 .tab-btn:hover:not(.active):not(:disabled) {
     color: var(--text-primary);
@@ -1238,12 +1276,17 @@ h6,
     outline-offset: -2px;
 }
 
-.tab-content {
+.tab-panel {
     display: none;
-    animation: tabFadeIn var(--transition-med) forwards;
+    opacity: 0;
+    transition: opacity var(--transition-med) ease, transform var(--transition-med) ease;
+    transform: translateY(4px);
 }
-.tab-content.active {
+.tab-panel.active {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
+    animation: tabFadeIn var(--transition-med) forwards;
 }
 
 @keyframes tabFadeIn {
@@ -1258,10 +1301,103 @@ h6,
 }
 
 /* ============================================================
-   10. BADGES, AVATARES Y TOOLTIPS
+   11. DROPDOWN (NUEVO)
    ============================================================ */
 
-/* --- Badges --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-toggle {
+    cursor: pointer;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 160px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-elevated);
+    padding: var(--space-xs) 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: all var(--transition-fast);
+    z-index: var(--z-dropdown);
+}
+.dropdown-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.dropdown-menu .dropdown-item {
+    display: block;
+    padding: var(--space-sm) var(--space-md);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+}
+.dropdown-menu .dropdown-item:hover {
+    background: rgba(0, 255, 204, 0.05);
+    color: var(--color-cyan);
+}
+.dropdown-menu .dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-xs) 0;
+}
+
+/* ============================================================
+   12. ACCORDION (NUEVO)
+   ============================================================ */
+
+.accordion {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+.accordion-header {
+    background: var(--bg-tertiary);
+    padding: var(--space-sm) var(--space-md);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: background var(--transition-fast);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.accordion-header:hover {
+    background: rgba(0, 255, 204, 0.03);
+}
+.accordion-header .accordion-icon {
+    transition: transform var(--transition-fast);
+}
+.accordion-header.open .accordion-icon {
+    transform: rotate(180deg);
+}
+.accordion-body {
+    background: var(--bg-secondary);
+    padding: 0 var(--space-md);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-med) ease, padding var(--transition-med) ease;
+}
+.accordion-body.open {
+    max-height: 500px;
+    padding: var(--space-md);
+}
+
+/* ============================================================
+   13. BADGES, AVATARES Y TOOLTIPS
+   ============================================================ */
+
 .badge-cyber {
     display: inline-flex;
     align-items: center;
@@ -1306,7 +1442,6 @@ h6,
     color: var(--color-green);
 }
 
-/* --- Avatares --- */
 .avatar {
     border-radius: 50%;
     display: inline-flex;
@@ -1363,7 +1498,6 @@ h6,
     object-fit: cover;
 }
 
-/* --- Tooltips --- */
 .tooltip {
     position: relative;
     display: inline-block;
@@ -1438,7 +1572,7 @@ h6,
 }
 
 /* ============================================================
-   11. SISTEMA DE TOASTS (MEJORADO)
+   14. TOASTS (MEJORADO)
    ============================================================ */
 
 #toast-container {
@@ -1468,7 +1602,6 @@ h6,
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 .toast .toast-icon {
     font-size: 1.1rem;
@@ -1476,7 +1609,6 @@ h6,
 }
 .toast .toast-content {
     flex: 1;
-    word-break: break-word;
 }
 .toast .toast-close {
     background: none;
@@ -1526,7 +1658,7 @@ h6,
 }
 
 /* ============================================================
-   12. MODALES
+   15. MODALES
    ============================================================ */
 
 .modal-overlay {
@@ -1609,7 +1741,7 @@ h6,
 }
 
 /* ============================================================
-   13. ANIMACIONES Y MICRO-INTERACCIONES
+   16. ANIMACIONES Y MICRO-INTERACCIONES
    ============================================================ */
 
 .pulse-dot {
@@ -1700,7 +1832,7 @@ h6,
 }
 
 /* ============================================================
-   14. ACCESIBILIDAD
+   17. ACCESIBILIDAD
    ============================================================ */
 
 :focus-visible {
@@ -1708,7 +1840,6 @@ h6,
     outline-offset: 2px;
     border-radius: var(--radius-sm);
 }
-
 .skip-link {
     position: absolute;
     top: -100%;
@@ -1725,7 +1856,7 @@ h6,
 }
 
 /* ============================================================
-   15. RESPONSIVE BREAKPOINTS (MEJORADOS)
+   18. RESPONSIVE BREAKPOINTS
    ============================================================ */
 
 @media (max-width: 1200px) {
@@ -1827,14 +1958,11 @@ h6,
     }
 }
 
-/* ============================================================
-   16. SOPORTE LANDSCAPE (MÓVILES)
-   ============================================================ */
-
+/* --- Soporte Landscape --- */
 @media (max-width: 992px) and (orientation: landscape) {
     .studio-wrapper {
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto;
+        grid-template-rows: auto;
         height: 100vh;
         overflow-y: auto;
         padding: var(--space-sm);
@@ -1863,11 +1991,11 @@ h6,
 }
 
 /* ============================================================
-   17. GUÍA DE ESTILOS
+   19. GUÍA DE ESTILOS (DOCUMENTACIÓN COMPLETA)
    ============================================================ */
 
 /*
-   📖 GUÍA DE ESTILO CYMATIC STUDIO v23.1
+   📖 GUÍA DE ESTILO CYMATIC STUDIO v23.2
 
    🎨 PALETA DE COLORES:
    - Cyan: #00ffcc (Principal)
@@ -1895,6 +2023,8 @@ h6,
    - .toast (Notificaciones con cola)
    - .modal-overlay (Ventanas modales)
    - .tabs-nav (Pestañas)
+   - .dropdown (Menús desplegables)
+   - .accordion (Acordeones)
    - .spinner, .skeleton, .pulse-dot (Feedback)
 
    📱 BREAKPOINTS:
@@ -1912,8 +2042,11 @@ h6,
    - Tamaños: .w-full, .h-full, .min-h-screen, .max-w-*
    - Posicionamiento: .relative, .absolute, .fixed, .sticky
    - Bordes: .border, .border-*, .rounded-*
+   - Display: .block, .inline, .inline-block, .hidden
+   - Opacidad: .opacity-25, .opacity-50, .opacity-75, .opacity-100
+   - Z-Index: .z-10, .z-20, .z-30, .z-40, .z-50, .z-auto
 */
 
 /* ============================================================
-   18. FIN DEL SISTEMA
+   20. FIN DEL SISTEMA
    ========================================================================== */
