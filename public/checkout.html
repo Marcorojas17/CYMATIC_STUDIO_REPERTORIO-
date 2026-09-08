@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYMATIC STUDIO v23.2 · Checkout Seguro</title>
+<link rel="stylesheet" href="/assets/css/quantum-core.css">
+</head>
+<body>
+
+<canvas id="canvas-kronos"></canvas>
+
+<div class="studio-wrapper" style="grid-template-columns: 1fr 450px 1fr; align-items: center; height: 100vh;">
+    <div></div>
+
+    <!-- Panel de Pago Unificado -->
+    <div class="glass-card interactive flex flex-col gap-md" style="grid-column: 2;">
+        <div class="card-title"><span class="accent">💳 ADQUISICIÓN DE LICENCIA QUANTUM</span></div>
+        
+        <!-- Pestañas para dividir Métodos de Pago -->
+        <div class="tabs-nav" id="checkout-tabs">
+            <button class="tab-btn active" data-tab="pay-clabe">Transferencia CLABE</button>
+            <button class="tab-btn" data-tab="pay-card">Tarjeta / Digital</button>
+        </div>
+
+        <!-- Opción A: CLABE Interbancaria (Mapeada al Webhook) -->
+        <div class="tab-panel active" id="pay-clabe">
+            <div class="form-group flex flex-col gap-xs">
+                <label>Banco del Nodo Central</label>
+                <input type="text" class="input-field" readonly value="BANCO QUANTUM S.A.">
+                
+                <label style="margin-top: 4px;">Clave Interbancaria (CLABE)</label>
+                <input type="text" class="input-field" id="txt-clabe" readonly value="0121 8000 5204 1604 05">
+                
+                <p style="font-size: 0.65rem; color: var(--text-secondary); line-height: 1.4; margin-top: 4px;">
+                    ⚠️ Al realizar tu transferencia bancaria, el webhook del servidor procesará el depósito e inyectará tu firma criptográfica de forma automática en menos de 5 minutos.
+                </p>
+                <button class="btn-kronos" style="margin-top: 10px; background: var(--color-cyan); color: #000;" onclick="navigator.clipboard.writeText(document.getElementById('txt-clabe').value); CymaticNotify.trigger('CLABE copiada al portapapeles', 'success');">Copiar Número CLABE</button>
+            </div>
+        </div>
+
+        <!-- Opción B: Tarjeta Directa -->
+        <div class="tab-panel" id="pay-card">
+            <div class="form-group flex flex-col gap-xs">
+                <label>Número de Tarjeta de Red</label>
+                <input type="text" class="input-field" placeholder="xxxx xxxx xxxx xxxx">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;">
+                    <div class="form-group"><label>Expiración</label><input type="text" class="input-field" placeholder="MM/AA"></div>
+                    <div class="form-group"><label>Firma CVC</label><input type="password" class="input-field" placeholder="•••"></div>
+                </div>
+                
+                <button class="btn-kronos" style="margin-top: 15px; width: 100%; border-color: var(--color-magenta); color: var(--color-magenta);" onclick="CymaticNotify.trigger('Procesando transacción bancaria por canal cifrado...', 'info'); setTimeout(()=> { CymaticNotify.trigger('Pago denegado: Usa el canal CLABE para ambiente local.', 'error') }, 2000)">Autorizar Cargo Digital</button>
+            </div>
+        </div>
+    </div>
+
+    <div></div>
+</div>
+
+<script src="/assets/js/quantum-core.js"></script>
+<script>
+    CymaticTabs.init('checkout-tabs', 'tab-panel');
+</script>
+</body>
+</html>
