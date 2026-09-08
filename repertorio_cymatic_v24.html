@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="folio" content="5204160405358537">
+    <meta name="sha" content="a4ff808e">
+    <meta name="trace" content="KRONOS-TRACE-PVA-5204160405358537-KRONOS-MT01JAAF">
+    <title>CYMATIC STUDIO · Repertorio Oficial v24</title>
+
+    <!-- ===== FUENTES DE ALTA DEFINICIÓN ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+               CYMATIC STUDIO v24 · REPERTORIO 8K + HI-FI SOUND
+               Estilos optimizados para pantallas de alta resolución.
+               ============================================================ */
+
+        /* ----- VARIABLES Y TEMAS ----- */
+        :root {
+            --bg-primary: #020308;
+            --bg-card: rgba(4, 7, 16, 0.75);
+            --border-color: rgba(0, 255, 204, 0.12);
+            --border-hover: rgba(0, 255, 204, 0.3);
+            --text-primary: #f0f4f8;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #475569;
+            --accent-cyan: #00ffcc;
+            --accent-magenta: #ff00cc;
+            --accent-purple: #9d4edd;
+            --accent-gold: #f0a030;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 204, 0.02);
+            --shadow-glow: 0 0 60px rgba(0, 255, 204, 0.06);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --space-lg: 24px;
+            --space-md: 16px;
+            --space-sm: 8px;
+            --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-med: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            --font-sans: 'Space Grotesk', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        /* ----- RESET GLOBAL ----- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* ===== FONDO CON EFECTO ESTELAR ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0, 255, 204, 0.02) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.02) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(255, 0, 204, 0.01) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .app-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 30px 60px;
+        }
+
+        /* ----- HEADER ----- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .logo {
+            font-family: var(--font-sans);
+            font-size: 2.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-magenta));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradShift 6s ease-in-out infinite alternate;
+            letter-spacing: -1px;
+        }
+        .logo small {
+            font-size: 0.8rem;
+            font-weight: 400;
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.3);
+            margin-left: 8px;
+        }
+        @keyframes gradShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .header-controls {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .btn-return {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            backdrop-filter: blur(4px);
+        }
+        .btn-return:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.05);
+        }
+        .btn-return.hidden {
+            display: none;
+        }
+
+        /* ===== GRID DE VERSIONES ===== */
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-top: 20px;
+        }
+
+        .version-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-card);
+            transition: all var(--transition-med);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .version-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 50%, rgba(0, 255, 204, 0.01));
+            pointer-events: none;
+        }
+        .version-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+        .version-card .tag {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
+            align-self: flex-start;
+            margin-bottom: 12px;
+            border: 1px solid transparent;
+        }
+        .tag.free {
+            background: rgba(100, 116, 139, 0.1);
+            color: #94a3b8;
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+        .tag.pro {
+            background: rgba(0, 255, 204, 0.05);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 255, 204, 0.1);
+        }
+        .tag.ultra {
+            background: rgba(168, 85, 247, 0.05);
+            color: var(--accent-purple);
+            border-color: rgba(168, 85, 247, 0.1);
+        }
+        .tag.enterprise {
+            background: rgba(255, 0, 204, 0.05);
+            color: var(--accent-magenta);
+            border-color: rgba(255, 0, 204, 0.1);
+        }
+
+        .version-card h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 2px;
+        }
+        .version-card .version-id {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+        .version-card .price {
+            font-size: 2rem;
+            font-weight: 900;
+            margin: 8px 0 12px;
+        }
+        .version-card .price small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        .version-card .price .old {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            text-decoration: line-through;
+            margin-left: 8px;
+            font-weight: 400;
+        }
+        .version-card ul {
+            list-style: none;
+            padding: 12px 0 0;
+            flex: 1;
+        }
+        .version-card ul li {
+            padding: 4px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .version-card ul li::before {
+            content: '✦';
+            color: var(--accent-cyan);
+            font-size: 0.7rem;
+        }
+
+        .btn-open {
+            margin-top: 16px;
+            padding: 10px 0;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            border-radius: var(--radius-md);
+            color: #000;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            width: 100%;
+        }
+        .btn-open:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+        }
+
+        /* ===== VISTA DE DEMO (se muestra al abrir una versión) ===== */
+        .demo-view {
+            display: none;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-card);
+            margin-top: 20px;
+            min-height: 400px;
+        }
+        .demo-view.active {
+            display: block;
+            animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .demo-view .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+        .demo-view .demo-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .demo-view .demo-content {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        .demo-view .demo-content .placeholder {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        .demo-view .demo-content .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--space-md);
+            margin: 20px 0;
+        }
+        .demo-view .demo-content .features-list .feat {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--accent-cyan);
+        }
+        .demo-view .demo-content .features-list .feat strong {
+            color: var(--text-primary);
+        }
+
+        /* ===== ESTILOS RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .app-wrapper {
+                padding: 20px 16px 40px;
+            }
+            .logo {
+                font-size: 1.8rem;
+            }
+            .version-grid {
+                grid-template-columns: 1fr;
+            }
+            .demo-view {
+                padding: 20px;
+            }
+            .demo-view .demo-header h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-cyan);
+            border-radius: 10px;
+        }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-cyan) transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper" id="app">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div class="logo">CYMATIC <small>REPERTORIO</small></div>
+            <div class="header-controls">
+                <button class="btn-return hidden" id="btnBack" onclick="goBack()">← Volver al Repertorio</button>
+            </div>
+        </header>
+
+        <!-- ===== GRID DE VERSIONES ===== -->
+        <div id="versionGrid" class="version-grid">
+            <!-- v1.0 -->
+            <div class="version-card" data-version="v1.0" onclick="abrirVersion('v1.0')">
+                <span class="tag free">GRATIS</span>
+                <h3>Quantum Seed</h3>
+                <div class="version-id">v1.0</div>
+                <div class="price">$0 <small>USD</small></div>
+                <ul>
+                    <li>Motor de ondas cimáticas básico</li>
+                    <li>Interacción por mouse</li>
+                    <li>3 modos de geometría</li>
+                </ul>
+                <button class="btn-open">Abrir Demo</button>
+            </div>
+
+            <!-- v3.0 -->
+            <div class="version-card" data-version="v3.0" onclick="abrirVersion('v3.0')">
+                <span class="tag pro">PRO</span>
+                <h3>Cymatic Core</h3>
+                <div class="version-id">v3.0</div>
+                <div class="price">$19 <small>USD</small> <span class="old">$39</span></div>
+                <ul>
+                    <li>5 modos de geometría sagrada</li>
+                    <li>Paletas de color básicas</li>
+                    <li>Slider de frecuencia</li>
+                </ul>
+                <button class="btn-open">Abrir Demo</button>
+            </div>
+
+            <!-- v8.0 -->
+            <div class="version-card" data-version="v8.0" onclick="abrirVersion('v8.0')">
+                <span class="tag pro">PRO+</span>
+                <h3>Quantum Bloom</h3>
+                <div class="version-id">v8.0</div>
+                <div class="price">$79 <small>USD</small> <span class="old">$149</span></div>
+                <ul>
+                    <li>5 modos + 5 paletas</li>
+                    <li>Post-procesado Bloom</li>
+                    <li>Exportación de frames PNG</li>
+                    <li>Grabación de video WebM</li>
+                </ul>
+                <button class="btn-open">Abrir Demo</button>
+            </div>
+
+            <!-- v15.0 -->
+            <div class="version-card" data-version="v15.0" onclick="abrirVersion('v15.0')">
+                <span class="tag ultra">ULTRA</span>
+                <h3>Omni-Sensory</h3>
+                <div class="version-id">v15.0</div>
+                <div class="price">$249 <small>USD</small> <span class="old">$399</span></div>
+                <ul>
+                    <li>Todo lo de PRO+</li>
+                    <li>IA generativa integrada</li>
+                    <li>Fluidos en GPU</li>
+                    <li>Tri-banda de audio</li>
+                </ul>
+                <button class="btn-open">Abrir Demo</button>
+            </div>
+
+            <!-- v21.5 -->
+            <div class="version-card" data-version="v21.5" onclick="abrirVersion('v21.5')">
+                <span class="tag enterprise">ENTERPRISE</span>
+                <h3>Singular Quantum</h3>
+                <div class="version-id">v21.5</div>
+                <div class="price">$499 <small>USD</small> <span class="old">$999</span></div>
+                <ul>
+                    <li>Todo lo de ULTRA</li>
+                    <li>FFT en tiempo real (32 barras)</li>
+                    <li>Drag & Drop de audio</li>
+                    <li>Sintetizador Web Audio</li>
+                    <li>Marca blanca incluida</li>
+                </ul>
+                <button class="btn-open">Abrir Demo</button>
+            </div>
+
+            <!-- v24 (nueva) -->
+            <div class="version-card" data-version="v24" onclick="abrirVersion('v24')" style="border-color:rgba(255,0,204,0.3);">
+                <span class="tag enterprise">ENTERPRISE+</span>
+                <h3>Quantum Core</h3>
+                <div class="version-id">v24 · Definitiva</div>
+                <div class="price">$749 <small>USD</small> <span class="old">$1,499</span></div>
+                <ul>
+                    <li>Repertorio completo integrado</li>
+                    <li>Sonido Hi‑Fi interactivo</li>
+                    <li>Diseño 8K nativo</li>
+                    <li>Modo oscuro/claro/contraste</li>
+                    <li>Sistema de presets</li>
+                </ul>
+                <button class="btn-open">Abrir Demo</button>
+            </div>
+        </div>
+
+        <!-- ===== VISTA DE DEMO (se llena dinámicamente) ===== -->
+        <div id="demoView" class="demo-view">
+            <div class="demo-header">
+                <h2 id="demoTitle">CYMATIC STUDIO</h2>
+                <button class="btn-return" onclick="goBack()">← Volver</button>
+            </div>
+            <div class="demo-content" id="demoContent">
+                <p>Cargando información de la versión...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+         JAVASCRIPT – CONTROLADOR DE NAVEGACIÓN Y SONIDO HI‑FI
+         ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ----- 1. SISTEMA DE SONIDO HI‑FI (Web Audio API) -----
+            let audioCtx = null;
+
+            function initAudio() {
+                if (!audioCtx) {
+                    try {
+                        audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    } catch (e) {
+                        console.warn('Web Audio API no soportada');
+                        return null;
+                    }
+                }
+                return audioCtx;
+            }
+
+            /**
+             * Reproduce un sonido de "clic" de alta fidelidad.
+             * @param {string} type - 'click' | 'hover' | 'open'
+             */
+            function playSound(type) {
+                try {
+                    const ctx = initAudio();
+                    if (!ctx) return;
+
+                    // Si el contexto está suspendido, reanudarlo
+                    if (ctx.state === 'suspended') {
+                        ctx.resume();
+                    }
+
+                    const now = ctx.currentTime;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    // Configuración según tipo
+                    let freq = 800,
+                        duration = 0.08,
+                        volume = 0.15;
+                    if (type === 'hover') {
+                        freq = 1200;
+                        duration = 0.06;
+                        volume = 0.08;
+                    } else if (type === 'open') {
+                        freq = 1400;
+                        duration = 0.15;
+                        volume = 0.2;
+                    }
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now);
+                    // Pequeño glide de frecuencia para dar calidez
+                    osc.frequency.exponentialRampToValueAtTime(freq * 1.2, now + duration * 0.5);
+
+                    gain.gain.setValueAtTime(volume, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + duration);
+
+                    // Filtro suave para Hi‑Fi
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(4000, now);
+                    gain.connect(filter);
+                    filter.connect(ctx.destination);
+
+                } catch (e) {
+                    // Silencio si falla el audio
+                }
+            }
+
+            // ----- 2. DATOS DE LAS VERSIONES -----
+            const versionData = {
+                'v1.0': {
+                    title: 'Quantum Seed',
+                    description: 'Versión gratuita que introduce el motor de ondas cimáticas básico con 3 modos de geometría y control por mouse.',
+                    features: [
+                        '3 modos de geometría: Chladni, Toroide, Metatrón',
+                        'Interacción en tiempo real con el cursor',
+                        'Interfaz minimalista y ligera'
+                    ],
+                    price: 'Gratis',
+                    tag: 'free'
+                },
+                'v3.0': {
+                    title: 'Cymatic Core',
+                    description: 'Primera versión de pago con 5 geometrías sagradas, paletas de color básicas y control de frecuencia.',
+                    features: [
+                        '5 modos: Chladni, Toroide, Metatrón, Flor de la Vida, Merkaba',
+                        '3 paletas de color',
+                        'Slider de frecuencia y amplitud'
+                    ],
+                    price: '$19 USD',
+                    tag: 'pro'
+                },
+                'v8.0': {
+                    title: 'Quantum Bloom',
+                    description: 'Versión profesional con efectos de post-procesado (Bloom), exportación de frames y grabación de video.',
+                    features: [
+                        '5 modos + 5 paletas dinámicas',
+                        'Efecto Bloom en tiempo real',
+                        'Exportación de secuencias PNG',
+                        'Grabación de video WebM'
+                    ],
+                    price: '$79 USD',
+                    tag: 'pro'
+                },
+                'v15.0': {
+                    title: 'Omni-Sensory',
+                    description: 'Versión ULTRA con IA generativa, simulación de fluidos en GPU y análisis de audio en triple banda.',
+                    features: [
+                        'IA generativa que modifica la geometría',
+                        'Simulación de fluidos (Navier‑Stokes simplificado)',
+                        'Tri-banda de audio (graves, medios, agudos)',
+                        'Mouse attraction avanzado'
+                    ],
+                    price: '$249 USD',
+                    tag: 'ultra'
+                },
+                'v21.5': {
+                    title: 'Singular Quantum',
+                    description: 'La versión Enterprise con FFT en tiempo real, carga de audio por arrastre y sintetizador integrado.',
+                    features: [
+                        'FFT de 32 barras en tiempo real',
+                        'Drag & Drop de archivos MP3/WAV',
+                        'Sintetizador polifónico con Web Audio',
+                        'Marca blanca personalizable'
+                    ],
+                    price: '$499 USD',
+                    tag: 'enterprise'
+                },
+                'v24': {
+                    title: 'Quantum Core Definitivo',
+                    description: 'La versión cumbre que integra todo el repertorio en un solo panel, con sonido Hi‑Fi y diseño 8K.',
+                    features: [
+                        'Repertorio completo de todas las versiones',
+                        'Sistema de sonido interactivo (Web Audio)',
+                        'Diseño optimizado para pantallas 8K',
+                        'Temas oscuro, claro y alto contraste',
+                        'Sistema de presets y logs'
+                    ],
+                    price: '$749 USD',
+                    tag: 'enterprise'
+                }
+            };
+
+            // ----- 3. FUNCIONES DE NAVEGACIÓN -----
+            window.abrirVersion = function(versionId) {
+                // Reproducir sonido de apertura
+                playSound('open');
+
+                const data = versionData[versionId];
+                if (!data) return;
+
+                const grid = document.getElementById('versionGrid');
+                const demo = document.getElementById('demoView');
+                const btnBack = document.getElementById('btnBack');
+
+                // Ocultar grid, mostrar demo
+                grid.style.display = 'none';
+                demo.classList.add('active');
+                btnBack.classList.remove('hidden');
+
+                // Llenar contenido
+                document.getElementById('demoTitle').textContent = data.title + ' · ' + versionId.toUpperCase();
+
+                const content = document.getElementById('demoContent');
+                const tagClass = data.tag;
+                const tagLabel = data.tag === 'free' ? 'Gratis' :
+                    data.tag === 'pro' ? 'PRO' :
+                    data.tag === 'ultra' ? 'ULTRA' : 'ENTERPRISE';
+
+                let featuresHtml = data.features.map(f => `<div class="feat"><strong>✦</strong> ${f}</div>`).join('');
+
+                content.innerHTML = `
+                        <p style="margin-bottom:16px;">${data.description}</p>
+                        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+                            <span style="background:rgba(0,255,204,0.05); padding:4px 16px; border-radius:40px; border:1px solid var(--border-color); font-family:var(--font-mono); font-size:0.7rem; color:var(--text-secondary);">
+                                ${tagLabel}
+                            </span>
+                            <span style="background:rgba(0,0,0,0.2); padding:4px 16px; border-radius:40px; font-family:var(--font-mono); font-size:0.8rem; font-weight:700; color:var(--accent-cyan);">
+                                ${data.price}
+                            </span>
+                        </div>
+                        <div class="placeholder">
+                            🎨 Demo interactiva de ${data.title}
+                        </div>
+                        <div class="features-list">
+                            ${featuresHtml}
+                        </div>
+                        <p style="margin-top:20px; color:var(--text-tertiary); font-size:0.8rem;">
+                            ⚡ Esta es una previsualización de la versión. Para acceder al código completo, adquiere la licencia correspondiente.
+                        </p>
+                    `;
+
+                // Desplazar al inicio de la demo
+                demo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            window.goBack = function() {
+                playSound('click');
+                const grid = document.getElementById('versionGrid');
+                const demo = document.getElementById('demoView');
+                const btnBack = document.getElementById('btnBack');
+
+                grid.style.display = 'grid';
+                demo.classList.remove('active');
+                btnBack.classList.add('hidden');
+                // Scroll al grid
+                grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            // ----- 4. EFECTOS DE SONIDO EN INTERACCIONES -----
+            // Hover en tarjetas
+            document.querySelectorAll('.version-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    playSound('hover');
+                });
+            });
+
+            // Hover en botones y elementos interactivos
+            document.querySelectorAll('.btn-open, .btn-return').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    playSound('hover');
+                });
+                btn.addEventListener('click', function() {
+                    playSound('click');
+                });
+            });
+
+            // ----- 5. INICIALIZACIÓN -----
+            console.log('✅ CYMATIC STUDIO · Repertorio v24 cargado');
+            console.log('🎵 Sonido Hi‑Fi activado (Web Audio API)');
+            console.log('📦 Versiones disponibles:', Object.keys(versionData).join(', '));
+
+            // Pre-cargar audio context en el primer clic del usuario
+            document.addEventListener('click', function initAudioOnFirstClick() {
+                initAudio();
+                document.removeEventListener('click', initAudioOnFirstClick);
+            }, { once: true });
+
+        })();
+    </script>
+
+</body>
+</html>
