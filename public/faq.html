@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYMATIC STUDIO v23.2 · FAQ & Soporte</title>
+<link rel="stylesheet" href="/assets/css/quantum-core.css">
+</head>
+<body>
+
+<canvas id="canvas-kronos"></canvas>
+
+<div class="studio-wrapper" style="grid-template-columns: 1fr 500px 1fr; align-items: center; height: 100vh;">
+    <div></div>
+
+    <!-- Módulo Central FAQ -->
+    <div class="glass-card interactive flex flex-col gap-md" style="grid-column: 2; max-height: 85vh; overflow-y: auto; padding-right: 10px;">
+        <div class="card-title"><span class="accent">📖 PREGUNTAS FRECUENTES // SOPORTE</span></div>
+        
+        <!-- Pregunta 1 -->
+        <div class="accordion" id="faq-1">
+            <button class="accordion-trigger">¿Por qué el motor exige desactivar el cursor nativo? <span>▼</span></button>
+            <div class="accordion-content">
+                <p>Para garantizar una cinemática de precisión inercial LERP suave a 60 FPS, el sistema implementa una mira telescópica acelerada por GPU sobre el canvas de hilos cimáticos, eliminando la latencia del puntero del sistema operativo.</p>
+            </div>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="accordion" id="faq-2">
+            <button class="accordion-trigger">¿Cómo opera la validación automatizada por CLABE? <span>▼</span></button>
+            <div class="accordion-content">
+                <p>Al transferir al número provisto en el checkout, el enrutador de Express recibe una notificación segura (Webhook). El backend intercepta el movimiento, contrasta los folios e inyecta la firma SHA directamente en la base de datos local SQLite.</p>
+            </div>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div class="accordion" id="faq-3">
+            <button class="accordion-trigger">¿Qué especificaciones ISO cumple el software? <span>▼</span></button>
+            <div class="accordion-content">
+                <p>El núcleo se rige bajo la norma ISO/IEC 25010 para asegurar eficiencia de desempeño, y bajo la norma ISO/IEC 27001 mediante el aislamiento perimetral de scripts confidenciales y contraseñas cifradas en PBKDF2/SHA-512.</p>
+            </div>
+        </div>
+
+        <a class="btn-kronos text-mono" href="/" style="text-decoration: none; margin-top: 10px; width: 100%;">← Volver al Nodo de Acceso</a>
+    </div>
+
+    <div></div>
+</div>
+
+<script src="/assets/js/quantum-core.js"></script>
+<script>
+    CymaticUI.initAccordion('faq-1');
+    CymaticUI.initAccordion('faq-2');
+    CymaticUI.initAccordion('faq-3');
+</script>
+</body>
+</html>
