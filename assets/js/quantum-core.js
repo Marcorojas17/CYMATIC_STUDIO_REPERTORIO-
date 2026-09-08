@@ -1,562 +1,204 @@
-// ==========================================================================
-// CYMATIC STUDIO v23.1 QUANTUM CORE+ · CONTROLADOR MAESTRO MEJORADO
-// ==========================================================================
-// MEJORAS (v23.0 → v23.1):
-// ✅ Cierre manual de toasts (botón ✕)
-// ✅ Persistencia de pestañas activas en localStorage
-// ✅ Ocultar cursor al salir de la ventana
-// ✅ ARIA roles y aria-live para accesibilidad
-// ✅ Evento personalizado 'themeChange' para sincronización
-// ✅ Debounce en resize
-// ✅ Manejo de errores en CymaticNotify
-// ✅ JSDoc en todas las funciones
-// ✅ Limpieza de recursos en beforeunload
-// ✅ Getter CymaticTheme.get()
-// ==========================================================================
-
-/**
- * @fileoverview Controlador principal de CYMATIC STUDIO v23.1.
- * Proporciona gestión de temas, cursor optimizado, notificaciones en cola,
- * navegación por pestañas y modales dinámicos.
- */
-
-(function() {
-    'use strict';
-
-    // ============================================================
-    // 1. SISTEMA DE TEMAS PERSISTENTES
-    // ============================================================
-
-    /**
-     * Gestor de temas claro/oscuro con persistencia en localStorage.
-     * @namespace CymaticTheme
-     */
-    window.CymaticTheme = {
-        /**
-         * Cambia el tema actual y lo persiste en localStorage.
-         * @param {string} theme - 'light' o 'dark'
-         */
-        set: function(theme) {
-            const validThemes = ['light', 'dark'];
-            if (!validThemes.includes(theme)) {
-                console.warn(`Tema inválido: "${theme}". Usando "dark".`);
-                theme = 'dark';
-            }
-            document.body.classList.remove('theme-light', 'theme-dark');
-            document.body.classList.add(`theme-${theme}`);
-            localStorage.setItem('cymatic-theme', theme);
-            // Disparar evento personalizado
-            document.dispatchEvent(new CustomEvent('themeChange', { detail: { theme } }));
-        },
-
-        /**
-         * Alterna entre tema claro y oscuro.
-         */
-        toggle: function() {
-            const current = this.get();
-            const next = current === 'light' ? 'dark' : 'light';
-            this.set(next);
-            if (window.CymaticNotify) {
-                window.CymaticNotify.trigger(`Tema cambiado a ${next.toUpperCase()}`, 'info');
-            }
-        },
-
-        /**
-         * Obtiene el tema actual.
-         * @returns {string} 'light' o 'dark'
-         */
-        get: function() {
-            if (document.body.classList.contains('theme-light')) return 'light';
-            if (document.body.classList.contains('theme-dark')) return 'dark';
-            return 'dark'; // default
-        },
-
-        /**
-         * Inicializa el tema con preferencia guardada o del sistema.
-         */
-        init: function() {
-            const saved = localStorage.getItem('cymatic-theme');
-            if (saved && (saved === 'light' || saved === 'dark')) {
-                this.set(saved);
-                return;
-            }
-            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-            this.set(prefersLight ? 'light' : 'dark');
-            // Escuchar cambios en la preferencia del sistema
-            const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-            mediaQuery.addEventListener('change', (e) => {
-                if (!localStorage.getItem('cymatic-theme')) {
-                    this.set(e.matches ? 'light' : 'dark');
-                }
-            });
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="folio" content="5204160405358537">
+    <meta name="sha" content="a4ff808e">
+    <meta name="trace" content="KRONOS-TRACE-PVA-5204160405358537-KRONOS-MT01JAAF">
+    <title>CYMATIC STUDIO v23.2 · Quantum Core++</title>
+    <link rel="stylesheet" href="/assets/css/quantum-core.css">
+    <style>
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
         }
-    };
-
-    // Inicializar tema
-    CymaticTheme.init();
-
-    // ============================================================
-    // 2. CURSOR PERSONALIZADO CON THROTTLING A 60 FPS
-    // ============================================================
-
-    /**
-     * Crea el elemento cursor en el DOM si no existe.
-     */
-    let cursorNode = document.getElementById('q-cursor');
-    if (!cursorNode) {
-        cursorNode = document.createElement('div');
-        cursorNode.className = 'custom-cursor';
-        cursorNode.id = 'q-cursor';
-        cursorNode.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(cursorNode);
-    }
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let cursorX = mouseX;
-    let cursorY = mouseY;
-    let lastRenderTime = 0;
-    let isHovering = false;
-    let isClicking = false;
-    let cursorFrameId = null;
-    const FPS_INTERVAL = 1000 / 60; // 60 FPS
-    const LERP_FACTOR = 0.16;
-
-    /**
-     * Actualiza la posición del cursor con interpolación y throttling.
-     * @param {DOMHighResTimeStamp} timestamp - Tiempo actual de animación.
-     */
-    function renderCursor(timestamp) {
-        const delta = timestamp - lastRenderTime;
-        if (delta >= FPS_INTERVAL) {
-            lastRenderTime = timestamp - (delta % FPS_INTERVAL);
-            cursorX += (mouseX - cursorX) * LERP_FACTOR;
-            cursorY += (mouseY - cursorY) * LERP_FACTOR;
-            cursorNode.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        .tab-panel {
+            display: none;
         }
-        cursorFrameId = requestAnimationFrame(renderCursor);
-    }
-
-    // --- Eventos de mouse ---
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    }, { passive: true });
-
-    window.addEventListener('mousedown', (e) => {
-        if (e.button === 0) {
-            isClicking = true;
-            cursorNode.classList.add('click');
+        .tab-panel.active {
+            display: block;
         }
-    }, { passive: true });
-
-    window.addEventListener('mouseup', (e) => {
-        if (e.button === 0) {
-            isClicking = false;
-            cursorNode.classList.remove('click');
+        /* Demo de dropdown y accordion */
+        .dropdown-menu a {
+            color: var(--text-primary);
         }
-    }, { passive: true });
+    </style>
+</head>
+<body>
 
-    // Ocultar cursor al salir de la ventana
-    window.addEventListener('mouseleave', () => {
-        cursorNode.style.opacity = '0';
-    }, { passive: true });
+    <canvas id="canvas-kronos"></canvas>
 
-    window.addEventListener('mouseenter', () => {
-        cursorNode.style.opacity = '1';
-    }, { passive: true });
+    <div class="studio-wrapper">
 
-    // --- Event Delegation para hover (mejor performance) ---
-    document.addEventListener('mouseover', (e) => {
-        const target = e.target.closest('button, a, input, select, textarea, .interactive, .btn-kronos, .tab-btn, .glass-card, [role="button"]');
-        if (target) {
-            isHovering = true;
-            cursorNode.classList.add('hover');
-        }
-    }, { passive: true });
+        <!-- PANEL IZQUIERDO -->
+        <div class="panel-left glass-card interactive">
+            <div class="card-title"><span class="accent">⚡ CONTROL CENTRAL</span></div>
+            <div class="flex flex-col gap-md">
+                <!-- Tema toggle -->
+                <div class="flex items-center gap-sm">
+                    <span class="text-sm text-muted">🌓 Tema</span>
+                    <label class="switch">
+                        <input type="checkbox" id="themeToggle" data-theme-toggle>
+                        <span class="slider"></span>
+                    </label>
+                </div>
 
-    document.addEventListener('mouseout', (e) => {
-        const target = e.target.closest('button, a, input, select, textarea, .interactive, .btn-kronos, .tab-btn, .glass-card, [role="button"]');
-        if (target) {
-            isHovering = false;
-            cursorNode.classList.remove('hover');
-        }
-    }, { passive: true });
+                <!-- Botones de acción -->
+                <div class="flex gap-sm flex-wrap">
+                    <button class="btn-kronos primary" onclick="CymaticNotify.trigger('Operación completada', 'success')">✅ Éxito</button>
+                    <button class="btn-kronos danger" onclick="CymaticNotify.trigger('Error crítico en el núcleo', 'error', 5000, 'top-right')">❌ Error</button>
+                    <button class="btn-kronos secondary" onclick="CymaticNotify.trigger('Advertencia de seguridad', 'warn')">⚠️ Advertencia</button>
+                    <button class="btn-kronos ghost" onclick="CymaticNotify.trigger('Información del sistema', 'info')">ℹ️ Info</button>
+                </div>
 
-    // Ocultar cursor en móviles
-    function updateCursorVisibility() {
-        if (window.innerWidth <= 992) {
-            cursorNode.style.display = 'none';
-        } else {
-            cursorNode.style.display = 'block';
-        }
-    }
-    window.addEventListener('resize', updateCursorVisibility, { passive: true });
-    updateCursorVisibility();
+                <!-- Modal -->
+                <button class="btn-kronos secondary" onclick="CymaticModal.open('demoModal')">📂 Abrir Modal</button>
 
-    // Iniciar loop del cursor
-    cursorFrameId = requestAnimationFrame(renderCursor);
+                <!-- Dropdown demo -->
+                <div class="dropdown">
+                    <button class="btn-kronos secondary dropdown-toggle">📋 Menú</button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Opción 1</a>
+                        <a href="#" class="dropdown-item">Opción 2</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">Opción 3</a>
+                    </div>
+                </div>
 
-    // ============================================================
-    // 3. SISTEMA DE NOTIFICACIONES (TOASTS) CON COLA Y CIERRE
-    // ============================================================
+                <!-- Badges -->
+                <div class="flex gap-sm flex-wrap">
+                    <span class="badge-cyber cyan">● Activo</span>
+                    <span class="badge-cyber magenta">● Procesando</span>
+                    <span class="badge-cyber gold">● Advertencia</span>
+                </div>
+            </div>
+        </div>
 
-    /**
-     * @namespace CymaticNotify
-     * @description Gestor de notificaciones en cola con prioridad y cierre manual.
-     */
-    window.CymaticNotify = {
-        /** @type {Array} Cola de notificaciones pendientes */
-        queue: [],
-        /** @type {number} Número de toasts visibles actualmente */
-        activeCount: 0,
-        /** @type {number} Máximo de toasts visibles simultáneamente */
-        maxVisible: 4,
-        /** @type {boolean} Indica si se está procesando la cola */
-        isProcessing: false,
+        <!-- PANEL CENTRAL (PESTAÑAS) -->
+        <div class="panel-center glass-card interactive">
+            <div class="card-title"><span class="accent">🌀 MONITOR CUÁNTICO</span></div>
 
-        /**
-         * Muestra una notificación toast.
-         * @param {string} text - Mensaje a mostrar.
-         * @param {string} type - 'info' | 'success' | 'warn' | 'error'
-         * @param {number} duration - Duración en ms (por defecto 3500).
-         * @param {number} priority - Menor = mayor prioridad (0-10, por defecto 5).
-         */
-        trigger: function(text, type = 'info', duration = 3500, priority = 5) {
-            if (!text || typeof text !== 'string') {
-                console.error('CymaticNotify: el mensaje debe ser un string válido.');
-                return;
-            }
-            if (!['info', 'success', 'warn', 'error'].includes(type)) {
-                console.warn(`CymaticNotify: tipo "${type}" inválido, usando "info".`);
-                type = 'info';
-            }
-            this.queue.push({ text, type, duration, priority });
-            this.queue.sort((a, b) => a.priority - b.priority);
-            this.processQueue();
-        },
+            <div class="tabs-nav" id="mainTabs">
+                <button class="tab-btn active" data-tab="panel-canvas">Canvas</button>
+                <button class="tab-btn" data-tab="panel-osc">Osciloscopio</button>
+                <button class="tab-btn" data-tab="panel-logs">Logs</button>
+            </div>
 
-        /**
-         * Procesa la cola de notificaciones.
-         * @private
-         */
-        processQueue: function() {
-            if (this.isProcessing || this.queue.length === 0 || this.activeCount >= this.maxVisible) {
-                return;
-            }
-            this.isProcessing = true;
-            const item = this.queue.shift();
-            this.activeCount++;
+            <div id="panel-canvas" class="tab-panel">
+                <div style="aspect-ratio:16/9; background:var(--bg-tertiary); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font-family:var(--font-mono);">
+                    🎨 Visualización 3D (Canvas)
+                </div>
+            </div>
+            <div id="panel-osc" class="tab-panel">
+                <div style="aspect-ratio:16/9; background:var(--bg-tertiary); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font-family:var(--font-mono);">
+                    📊 Osciloscopio XY
+                </div>
+            </div>
+            <div id="panel-logs" class="tab-panel">
+                <div style="background:var(--bg-tertiary); border-radius:var(--radius-sm); padding:var(--space-md); max-height:200px; overflow-y:auto; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-secondary);">
+                    <div>[10:28:19] CRISTAL #3 D:3 X:1.94 A:25Hz [4fff88bc]</div>
+                    <div>[10:28:19] CRISTAL #2 D:3 X:4.37 A:24Hz [4fff88bc]</div>
+                    <div style="color:var(--color-cyan);">[07:35:04] TRACE: KRONOS-TRACE-PVA-520416049535857</div>
+                </div>
+            </div>
+        </div>
 
-            const container = document.getElementById('toast-container');
-            if (!container) {
-                console.error('CymaticNotify: contenedor de toasts no encontrado.');
-                this.activeCount--;
-                this.isProcessing = false;
-                this.processQueue();
-                return;
-            }
+        <!-- PANEL DERECHO -->
+        <div class="panel-right glass-card interactive">
+            <div class="card-title"><span class="accent">🧩 COMPONENTES</span></div>
+            <div class="flex flex-col gap-md">
+                <div class="flex items-center gap-sm">
+                    <div class="avatar md cyan">CK</div>
+                    <div>
+                        <div class="text-sm font-mono" style="font-weight:700;">Cymatic Kernel</div>
+                        <div class="text-xs text-muted">v23.2 · Quantum Core++</div>
+                    </div>
+                </div>
 
-            const toast = document.createElement('div');
-            toast.className = `toast ${item.type}`;
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'polite');
+                <div class="tooltip">
+                    <button class="btn-kronos sm">🛠️ Hover me</button>
+                    <span class="tooltip-text">🔮 Herramienta cuántica activa</span>
+                </div>
 
-            const icons = {
-                info: 'ℹ️',
-                success: '✅',
-                warn: '⚠️',
-                error: '❌'
-            };
+                <div class="flex items-center gap-sm">
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="text-sm text-muted">Modo Cuántico</span>
+                </div>
 
-            toast.innerHTML = `
-                <span class="toast-icon">${icons[item.type] || '📢'}</span>
-                <span class="toast-content">${item.text}</span>
-                <button class="toast-close" aria-label="Cerrar notificación">✕</button>
-            `;
+                <div class="form-group">
+                    <label>Nodo ID</label>
+                    <input type="text" class="input-field" placeholder="Ingresa el identificador...">
+                </div>
 
-            const closeBtn = toast.querySelector('.toast-close');
-            closeBtn.addEventListener('click', () => {
-                this.closeToast(toast);
-            });
+                <!-- Accordion demo -->
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>📁 Información del Nodo</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">
+                        <p class="text-sm text-muted">Folio: 5204160405358537</p>
+                        <p class="text-sm text-muted">SHA: a4ff808e</p>
+                        <p class="text-sm text-muted">Trace: KRONOS-TRACE-PVA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            container.appendChild(toast);
+    <!-- MODAL -->
+    <div class="modal-overlay" id="demoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">🔮 Información del Nodo</div>
+                <button class="modal-close" onclick="CymaticModal.close('demoModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Folio:</strong> 5204160405358537</p>
+                <p><strong>SHA:</strong> a4ff808e</p>
+                <p><strong>Trace:</strong> KRONOS-TRACE-PVA</p>
+                <p class="text-sm text-muted mt-sm">Este nodo está sincronizado con el motor cimático principal.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-kronos secondary" onclick="CymaticModal.close('demoModal')">Cerrar</button>
+                <button class="btn-kronos primary" onclick="CymaticNotify.trigger('Nodo verificado correctamente', 'success'); CymaticModal.close('demoModal')">Verificar</button>
+            </div>
+        </div>
+    </div>
 
-            // Auto-cierre
-            const timeoutId = setTimeout(() => {
-                this.closeToast(toast);
-            }, item.duration || 3500);
+    <!-- SCRIPTS -->
+    <script src="/assets/js/quantum-core.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar pestañas
+            CymaticTabs.init('mainTabs', 'tab-panel', 'cymatic-main-tab');
 
-            toast._timeoutId = timeoutId;
-
-            this.isProcessing = false;
-            // Procesar siguiente
-            if (this.queue.length > 0 && this.activeCount < this.maxVisible) {
-                setTimeout(() => this.processQueue(), 100);
-            }
-        },
-
-        /**
-         * Cierra un toast específico.
-         * @param {HTMLElement} toast - Elemento toast a cerrar.
-         * @private
-         */
-        closeToast: function(toast) {
-            if (toast._closing) return;
-            toast._closing = true;
-            if (toast._timeoutId) {
-                clearTimeout(toast._timeoutId);
-            }
-            toast.classList.add('hide');
-            toast.addEventListener('animationend', () => {
-                if (toast.parentNode) toast.remove();
-                this.activeCount = Math.max(0, this.activeCount - 1);
-                this.processQueue();
-            });
-        }
-    };
-
-    // Crear contenedor de toasts si no existe
-    if (!document.getElementById('toast-container')) {
-        const container = document.createElement('div');
-        container.id = 'toast-container';
-        container.setAttribute('aria-live', 'polite');
-        container.setAttribute('aria-atomic', 'true');
-        document.body.appendChild(container);
-    }
-
-    // ============================================================
-    // 4. SISTEMA DE TABS CON PERSISTENCIA
-    // ============================================================
-
-    /**
-     * @namespace CymaticTabs
-     * @description Gestor de pestañas con persistencia en localStorage.
-     */
-    window.CymaticTabs = {
-        /**
-         * Inicializa un grupo de pestañas.
-         * @param {string} navId - ID del contenedor de navegación.
-         * @param {string} contentClass - Clase de los paneles de contenido.
-         * @param {string} storageKey - Clave para localStorage (opcional).
-         */
-        init: function(navId, contentClass, storageKey = 'cymatic-active-tab') {
-            const nav = document.getElementById(navId);
-            if (!nav) {
-                console.warn(`CymaticTabs: contenedor "${navId}" no encontrado.`);
-                return;
+            // Sincronizar toggle de tema
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const currentTheme = CymaticTheme.get();
+                themeToggle.checked = currentTheme === 'light' || currentTheme === 'contrast';
+                themeToggle.addEventListener('change', function() {
+                    CymaticTheme.toggle();
+                    const newTheme = CymaticTheme.get();
+                    this.checked = newTheme === 'light' || newTheme === 'contrast';
+                });
+                document.addEventListener('themeChange', (e) => {
+                    themeToggle.checked = e.detail.theme === 'light' || e.detail.theme === 'contrast';
+                });
             }
 
-            const tabs = nav.querySelectorAll('.tab-btn');
-            const panels = document.querySelectorAll(`.${contentClass}`);
-
-            if (tabs.length === 0 || panels.length === 0) {
-                console.warn(`CymaticTabs: no se encontraron tabs o paneles.`);
-                return;
-            }
-
-            // Asignar roles ARIA
-            nav.setAttribute('role', 'tablist');
-            tabs.forEach(tab => {
-                tab.setAttribute('role', 'tab');
-                const targetId = tab.dataset.tab;
-                const panel = document.getElementById(targetId);
-                if (panel) {
-                    tab.setAttribute('aria-controls', targetId);
-                    panel.setAttribute('role', 'tabpanel');
-                    panel.setAttribute('aria-labelledby', tab.id || tab.textContent);
-                }
-            });
-
-            // Restaurar estado guardado
-            const savedTab = localStorage.getItem(storageKey);
-            if (savedTab) {
-                const targetTab = tabs.find(t => t.dataset.tab === savedTab);
-                if (targetTab) {
-                    this.activateTab(targetTab, panels, storageKey);
-                } else {
-                    // Si no se encuentra, activar el primero
-                    if (tabs[0]) this.activateTab(tabs[0], panels, storageKey);
-                }
-            } else {
-                // Activar el primero por defecto
-                if (tabs[0]) this.activateTab(tabs[0], panels, storageKey);
-            }
-
-            // Event listeners
-            nav.addEventListener('click', (e) => {
-                const button = e.target.closest('.tab-btn');
-                if (!button || button.disabled) return;
-                this.activateTab(button, panels, storageKey);
-            });
-        },
-
-        /**
-         * Activa una pestaña específica.
-         * @param {HTMLElement} tab - Elemento botón de la pestaña.
-         * @param {NodeList} panels - Lista de paneles de contenido.
-         * @param {string} storageKey - Clave para localStorage.
-         * @private
-         */
-        activateTab: function(tab, panels, storageKey) {
-            const targetId = tab.dataset.tab;
-            const nav = tab.closest('[role="tablist"]');
-
-            // Desactivar todas
-            nav.querySelectorAll('.tab-btn').forEach(t => {
-                t.classList.remove('active');
-                t.setAttribute('aria-selected', 'false');
-            });
-            panels.forEach(p => {
-                p.classList.remove('active');
-                p.style.display = 'none';
-            });
-
-            // Activar la seleccionada
-            tab.classList.add('active');
-            tab.setAttribute('aria-selected', 'true');
-
-            const panel = document.getElementById(targetId);
-            if (panel) {
-                panel.classList.add('active');
-                panel.style.display = 'block';
-            }
-
-            // Guardar estado
-            if (storageKey) {
-                localStorage.setItem(storageKey, targetId);
-            }
-
-            if (window.CymaticNotify) {
-                window.CymaticNotify.trigger(`Panel ${targetId.toUpperCase()} activado`, 'info', 1500);
-            }
-        }
-    };
-
-    // ============================================================
-    // 5. SISTEMA DE MODALES
-    // ============================================================
-
-    /**
-     * @namespace CymaticModal
-     * @description Gestor de ventanas modales.
-     */
-    window.CymaticModal = {
-        /**
-         * Abre un modal por su ID.
-         * @param {string} modalId - ID del modal.
-         */
-        open: function(modalId) {
-            const overlay = document.getElementById(modalId);
-            if (!overlay) {
-                console.warn(`CymaticModal: modal "${modalId}" no encontrado.`);
-                return;
-            }
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            const firstInput = overlay.querySelector('input, button, a');
-            if (firstInput) firstInput.focus();
-        },
-
-        /**
-         * Cierra un modal por su ID.
-         * @param {string} modalId - ID del modal.
-         */
-        close: function(modalId) {
-            const overlay = document.getElementById(modalId);
-            if (!overlay) return;
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        },
-
-        /**
-         * Cierra todos los modales abiertos.
-         */
-        closeAll: function() {
-            document.querySelectorAll('.modal-overlay.active').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.body.style.overflow = '';
-        }
-    };
-
-    // Cerrar modales con clic fuera del contenido
-    document.addEventListener('click', (e) => {
-        const overlay = e.target.closest('.modal-overlay');
-        if (overlay && e.target === overlay) {
-            CymaticModal.close(overlay.id);
-        }
-    });
-
-    // Cerrar modales con tecla ESC
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            CymaticModal.closeAll();
-        }
-    }, { passive: true });
-
-    // ============================================================
-    // 6. LIMPIEZA DE RECURSOS
-    // ============================================================
-
-    /**
-     * Limpia recursos al cerrar la página.
-     */
-    window.addEventListener('beforeunload', function() {
-        if (cursorFrameId) {
-            cancelAnimationFrame(cursorFrameId);
-            cursorFrameId = null;
-        }
-        // Limpiar cola de toasts
-        if (window.CymaticNotify) {
-            window.CymaticNotify.queue = [];
-            window.CymaticNotify.activeCount = 0;
-            window.CymaticNotify.isProcessing = false;
-        }
-        // Eliminar toasts del DOM
-        const container = document.getElementById('toast-container');
-        if (container) {
-            container.innerHTML = '';
-        }
-    });
-
-    // ============================================================
-    // 7. DEBOUNCE PARA RESIZE
-    // ============================================================
-
-    /**
-     * Debounce simple para eventos de resize.
-     * @param {Function} fn - Función a ejecutar.
-     * @param {number} delay - Retraso en ms.
-     * @returns {Function} Función con debounce.
-     */
-    function debounce(fn, delay = 100) {
-        let timeoutId = null;
-        return function(...args) {
-            if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                fn.apply(this, args);
-                timeoutId = null;
-            }, delay);
-        };
-    }
-
-    // Aplicar debounce a eventos de resize
-    const debouncedResize = debounce(() => {
-        updateCursorVisibility();
-    }, 150);
-    window.addEventListener('resize', debouncedResize, { passive: true });
-
-    // ============================================================
-    // 8. CONSOLA DE INICIALIZACIÓN
-    // ============================================================
-
-    console.log('✅ CYMATIC STUDIO v23.1 Quantum Core+ cargado.');
-    console.log('📦 Módulos disponibles:');
-    console.log('  - CymaticTheme (set, toggle, get, init)');
-    console.log('  - CymaticNotify (trigger, closeToast)');
-    console.log('  - CymaticTabs (init, activateTab)');
-    console.log('  - CymaticModal (open, close, closeAll)');
-    console.log('🎯 Tema actual:', CymaticTheme.get());
-
-})();
+            // Mensaje de bienvenida
+            setTimeout(() => {
+                CymaticNotify.trigger('🚀 CYMATIC STUDIO v23.2 Quantum Core++ cargado', 'success', 4000);
+            }, 600);
+        });
+    </script>
+</body>
+</html>
