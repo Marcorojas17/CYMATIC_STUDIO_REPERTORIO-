@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYMATIC STUDIO v23.2 · Nodo de Cliente</title>
+<link rel="stylesheet" href="/assets/css/quantum-core.css">
+</head>
+<body>
+
+<canvas id="canvas-kronos"></canvas>
+
+<div class="studio-wrapper">
+    <!-- Header de Red -->
+    <header class="glass-card interactive" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 12px 24px;">
+        <div style="font-family: var(--font-sans); font-weight: 700; font-size: 1rem; letter-spacing: -0.5px;">CYMATIC <span>// CLIENT NODE</span></div>
+        <button class="btn-kronos" onclick="CymaticTheme.toggle()">Invertir Tema</button>
+    </header>
+
+    <!-- Panel de Repositorio de Códigos -->
+    <main class="glass-card interactive flex flex-col gap-md">
+        <div class="card-title"><span class="accent">// ENTREGABLES ACTIVOS</span></div>
+        
+        <div class="form-group">
+            <label>Motor Gráfico Compilado</label>
+            <div class="flex justify-between align-center" style="display: flex; background: var(--bg-tertiary); padding: var(--space-sm); border-radius: var(--radius-sm); margin-top: 4px;">
+                <span class="text-xs text-cyan">quantum_core_v23.2.zip</span>
+                <button class="btn-kronos" onclick="CymaticNotify.trigger('Descarga iniciada desde canal seguro', 'success')">Descargar</button>
+            </div>
+        </div>
+
+        <!-- Mapeo de Documentación Interactiva por Acordeón -->
+        <div class="accordion" id="hud-accordion">
+            <button class="accordion-trigger">Ver Registro de Auditoría de Red <span>▼</span></button>
+            <div class="accordion-content">
+                <p style="font-family: var(--font-mono); font-size: 0.65rem;">[AUDIT][ISO-27001] Redireccionamiento perimetral TLS 1.3 activo. Handshake de cookies HttpOnly verificado satisfactoriamente in situ.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Espaciado Central -->
+    <div></div>
+
+    <!-- Panel de Estado y Perfil Nodal -->
+    <aside class="glass-card interactive flex flex-col gap-md">
+        <div class="card-title"><span class="accent">// FIRMA OPERATIVA</span></div>
+        
+        <!-- Dropdown de Acciones Avanzadas -->
+        <div class="dropdown" id="hud-dropdown">
+            <button class="btn-kronos dropdown-trigger" style="width: 100%; justify-content: space-between;">Gestión de Token <span>▼</span></button>
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="CymaticNotify.trigger('Token regenerado. Firma SHA: a4ff808e', 'info')">Regenerar SHA</div>
+                <div class="dropdown-item" onclick="CymaticNotify.trigger('Licencia dada de baja localmente', 'error')">Revocar Acceso</div>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+            <label>Carga del Nodo de Soporte</label>
+            <div class="skeleton" style="margin-top: 5px; height: 14px;"></div>
+            <div class="skeleton" style="margin-top: 5px; height: 14px; width: 75%;"></div>
+        </div>
+    </aside>
+</div>
+
+<script src="/assets/js/quantum-core.js"></script>
+<script>
+    CymaticUI.initDropdown('hud-dropdown');
+    CymaticUI.initAccordion('hud-accordion');
+</script>
+</body>
+</html>
